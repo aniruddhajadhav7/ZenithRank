@@ -1,0 +1,204 @@
+[
+  {
+    "candidate_id": "CAND_DEMO_001",
+    "profile": {
+      "summary": "Senior ML Engineer with 7 years experience building production search and ranking systems. Led re-architecture of recommendation engine serving 50M+ users. Deep expertise in dense retrieval, NDCG optimization, and hybrid search pipelines using Elasticsearch and FAISS.",
+      "headline": "Senior ML Engineer | Search & Ranking | NLP",
+      "current_title": "Senior Machine Learning Engineer",
+      "current_company": "Flipkart",
+      "location": "Bangalore",
+      "years_of_experience": 7.0
+    },
+    "skills": [
+      {"name": "Machine Learning", "proficiency": "expert", "duration_months": 60},
+      {"name": "Information Retrieval", "proficiency": "expert", "duration_months": 48},
+      {"name": "Elasticsearch", "proficiency": "advanced", "duration_months": 36},
+      {"name": "Python", "proficiency": "expert", "duration_months": 72},
+      {"name": "PyTorch", "proficiency": "advanced", "duration_months": 30},
+      {"name": "FAISS", "proficiency": "advanced", "duration_months": 24},
+      {"name": "Ranking Systems", "proficiency": "expert", "duration_months": 42}
+    ],
+    "career_history": [
+      {"title": "Senior ML Engineer", "company": "Flipkart", "duration_months": 36, "company_age_years": 18, "description": "Leading search ranking team. Built learning-to-rank models using XGBoost and LightGBM. Deployed hybrid retrieval pipelines combining BM25 with dense embeddings via FAISS."},
+      {"title": "ML Engineer", "company": "Amazon", "duration_months": 30, "company_age_years": 30, "description": "Developed recommendation engine for product search. Implemented A/B testing framework for ranking model evaluation using NDCG and MRR metrics."}
+    ],
+    "education": [{"degree": "B.Tech", "field_of_study": "Computer Science", "institution": "IIT Bombay", "tier": "tier_1"}],
+    "redrob_signals": {"recruiter_response_rate": 0.72, "notice_period_days": 30, "willing_to_relocate": true},
+    "certifications": [],
+    "projects": []
+  },
+  {
+    "candidate_id": "CAND_DEMO_002",
+    "profile": {
+      "summary": "Applied NLP researcher turned engineer with 6 years building large-scale text retrieval systems. Expertise in transformer-based reranking, vector search with Qdrant and Pinecone, and evaluation frameworks.",
+      "headline": "NLP Engineer | Retrieval | Embeddings",
+      "current_title": "NLP Engineer",
+      "current_company": "Razorpay",
+      "location": "Pune",
+      "years_of_experience": 6.0
+    },
+    "skills": [
+      {"name": "NLP", "proficiency": "expert", "duration_months": 54},
+      {"name": "Python", "proficiency": "expert", "duration_months": 60},
+      {"name": "Transformers", "proficiency": "advanced", "duration_months": 30},
+      {"name": "Vector Search", "proficiency": "advanced", "duration_months": 24},
+      {"name": "Recommendation Systems", "proficiency": "intermediate", "duration_months": 18}
+    ],
+    "career_history": [
+      {"title": "NLP Engineer", "company": "Razorpay", "duration_months": 24, "company_age_years": 11, "description": "Built semantic search pipeline for merchant discovery using dense embeddings, vector search with Qdrant, and hybrid retrieval with Elasticsearch."},
+      {"title": "Data Scientist", "company": "Swiggy", "duration_months": 30, "company_age_years": 10, "description": "Developed personalized recommendation engine. Implemented learning-to-rank models evaluated with NDCG and MAP metrics."}
+    ],
+    "education": [{"degree": "M.Tech", "field_of_study": "Computer Science", "institution": "IIIT Hyderabad", "tier": "tier_1"}],
+    "redrob_signals": {"recruiter_response_rate": 0.65, "notice_period_days": 60, "willing_to_relocate": true},
+    "certifications": [],
+    "projects": []
+  },
+  {
+    "candidate_id": "CAND_DEMO_003",
+    "profile": {
+      "summary": "Backend engineer with 5 years of experience in distributed systems and microservices. Some exposure to ML through feature store development.",
+      "headline": "Backend Engineer | Distributed Systems",
+      "current_title": "Senior Software Engineer",
+      "current_company": "PhonePe",
+      "location": "Hyderabad",
+      "years_of_experience": 5.0
+    },
+    "skills": [
+      {"name": "Java", "proficiency": "expert", "duration_months": 48},
+      {"name": "Python", "proficiency": "advanced", "duration_months": 30},
+      {"name": "Kubernetes", "proficiency": "advanced", "duration_months": 24},
+      {"name": "Docker", "proficiency": "advanced", "duration_months": 30}
+    ],
+    "career_history": [
+      {"title": "Senior Software Engineer", "company": "PhonePe", "duration_months": 30, "company_age_years": 9, "description": "Building high-throughput payment processing backend. Implemented distributed caching layer and API gateway."},
+      {"title": "Software Engineer", "company": "Paytm", "duration_months": 24, "company_age_years": 14, "description": "Developed REST APIs and microservice infrastructure for merchant onboarding platform."}
+    ],
+    "education": [{"degree": "B.Tech", "field_of_study": "Information Technology", "institution": "NIT Trichy", "tier": "tier_2"}],
+    "redrob_signals": {"recruiter_response_rate": 0.45, "notice_period_days": 90, "willing_to_relocate": false},
+    "certifications": [],
+    "projects": []
+  },
+  {
+    "candidate_id": "CAND_DEMO_TRAP_01",
+    "profile": {
+      "summary": "My professional background is in marketing manager — I've built and led teams across multiple domains. Expert in machine learning, deep learning, NLP, and advanced AI systems.",
+      "headline": "Experienced Marketing Manager",
+      "current_title": "Marketing Manager",
+      "current_company": "Generic Corp",
+      "location": "Mumbai",
+      "years_of_experience": 8.0
+    },
+    "skills": [
+      {"name": "Machine Learning", "proficiency": "expert", "duration_months": 0},
+      {"name": "Deep Learning", "proficiency": "expert", "duration_months": 0},
+      {"name": "NLP", "proficiency": "expert", "duration_months": 0},
+      {"name": "Python", "proficiency": "expert", "duration_months": 0}
+    ],
+    "career_history": [
+      {"title": "Marketing Manager", "company": "Generic Corp", "duration_months": 48, "company_age_years": 15, "description": "Led marketing campaigns and brand strategy across APAC region."}
+    ],
+    "education": [{"degree": "MBA", "field_of_study": "Marketing", "institution": "State University", "tier": "tier_3"}],
+    "redrob_signals": {"recruiter_response_rate": 0.55, "notice_period_days": 30, "willing_to_relocate": true},
+    "certifications": [],
+    "projects": []
+  },
+  {
+    "candidate_id": "CAND_DEMO_TRAP_02",
+    "profile": {
+      "summary": "Senior ML engineer with expertise in search and recommendation systems.",
+      "headline": "ML Engineer | Search | NLP",
+      "current_title": "ML Engineer",
+      "current_company": "TrapStartup",
+      "location": "Bangalore",
+      "years_of_experience": 8.0
+    },
+    "skills": [
+      {"name": "Machine Learning", "proficiency": "expert", "duration_months": 48},
+      {"name": "Python", "proficiency": "advanced", "duration_months": 60}
+    ],
+    "career_history": [
+      {"title": "ML Engineer", "company": "TrapStartup", "duration_months": 120, "company_age_years": 3, "description": "Built search ranking systems and recommendation pipelines."}
+    ],
+    "education": [{"degree": "B.Tech", "field_of_study": "CS", "institution": "IIT Delhi", "tier": "tier_1"}],
+    "redrob_signals": {"recruiter_response_rate": 0.80, "notice_period_days": 15, "willing_to_relocate": true},
+    "certifications": [],
+    "projects": []
+  },
+  {
+    "candidate_id": "CAND_DEMO_004",
+    "profile": {
+      "summary": "Search infrastructure engineer with 8 years building enterprise search platforms. Expert in Elasticsearch, Solr, and hybrid search architectures combining sparse and dense retrieval.",
+      "headline": "Search Engineer | Elasticsearch | IR",
+      "current_title": "Staff Search Engineer",
+      "current_company": "Zomato",
+      "location": "Delhi NCR",
+      "years_of_experience": 8.0
+    },
+    "skills": [
+      {"name": "Elasticsearch", "proficiency": "expert", "duration_months": 60},
+      {"name": "Information Retrieval", "proficiency": "expert", "duration_months": 54},
+      {"name": "Python", "proficiency": "expert", "duration_months": 72},
+      {"name": "Search Ranking", "proficiency": "advanced", "duration_months": 42},
+      {"name": "Machine Learning", "proficiency": "advanced", "duration_months": 36},
+      {"name": "FAISS", "proficiency": "intermediate", "duration_months": 18}
+    ],
+    "career_history": [
+      {"title": "Staff Search Engineer", "company": "Zomato", "duration_months": 36, "company_age_years": 16, "description": "Architected hybrid search system combining BM25 with vector embeddings. Improved search NDCG@10 by 18%. Built real-time indexing pipeline processing 5M+ documents."},
+      {"title": "Search Engineer", "company": "Flipkart", "duration_months": 30, "company_age_years": 18, "description": "Developed query understanding module and relevance ranking features. Implemented learning-to-rank pipeline with LightGBM and XGBoost."}
+    ],
+    "education": [{"degree": "M.Tech", "field_of_study": "Computer Science", "institution": "IIT Kanpur", "tier": "tier_1"}],
+    "redrob_signals": {"recruiter_response_rate": 0.68, "notice_period_days": 30, "willing_to_relocate": true},
+    "certifications": [],
+    "projects": []
+  },
+  {
+    "candidate_id": "CAND_DEMO_005",
+    "profile": {
+      "summary": "AI Engineer specializing in recommendation systems and personalization. Built end-to-end ML pipelines for content ranking and user engagement optimization at scale.",
+      "headline": "AI Engineer | Recommendations | Personalization",
+      "current_title": "AI Engineer",
+      "current_company": "Spotify",
+      "location": "Bangalore",
+      "years_of_experience": 5.5
+    },
+    "skills": [
+      {"name": "Recommendation Systems", "proficiency": "expert", "duration_months": 42},
+      {"name": "Python", "proficiency": "expert", "duration_months": 54},
+      {"name": "TensorFlow", "proficiency": "advanced", "duration_months": 36},
+      {"name": "Feature Engineering", "proficiency": "advanced", "duration_months": 30},
+      {"name": "XGBoost", "proficiency": "advanced", "duration_months": 24}
+    ],
+    "career_history": [
+      {"title": "AI Engineer", "company": "Spotify", "duration_months": 24, "company_age_years": 18, "description": "Developing content recommendation algorithms using collaborative filtering and neural embeddings. A/B testing ranking models with NDCG and engagement metrics."},
+      {"title": "ML Engineer", "company": "Meesho", "duration_months": 30, "company_age_years": 8, "description": "Built product recommendation engine. Implemented real-time feature store and model serving infrastructure with sub-50ms latency."}
+    ],
+    "education": [{"degree": "B.Tech", "field_of_study": "Computer Science", "institution": "BITS Pilani", "tier": "tier_1"}],
+    "redrob_signals": {"recruiter_response_rate": 0.78, "notice_period_days": 15, "willing_to_relocate": true},
+    "certifications": [],
+    "projects": []
+  },
+  {
+    "candidate_id": "CAND_DEMO_TRAP_03",
+    "profile": {
+      "summary": "Experienced accountant with deep knowledge of financial systems. Expert in AI, deep learning, and neural networks.",
+      "headline": "Senior Accountant | Finance",
+      "current_title": "Accountant",
+      "current_company": "FinanceCo",
+      "location": "Chennai",
+      "years_of_experience": 10.0
+    },
+    "skills": [
+      {"name": "Deep Learning", "proficiency": "expert", "duration_months": 0},
+      {"name": "Neural Networks", "proficiency": "expert", "duration_months": 0},
+      {"name": "AI", "proficiency": "expert", "duration_months": 0},
+      {"name": "Excel", "proficiency": "expert", "duration_months": 96}
+    ],
+    "career_history": [
+      {"title": "Accountant", "company": "FinanceCo", "duration_months": 60, "company_age_years": 25, "description": "Managing financial reporting and audit compliance."}
+    ],
+    "education": [{"degree": "B.Com", "field_of_study": "Accounting", "institution": "Mumbai University", "tier": "tier_3"}],
+    "redrob_signals": {"recruiter_response_rate": 0.40, "notice_period_days": 30, "willing_to_relocate": false},
+    "certifications": [],
+    "projects": []
+  }
+]

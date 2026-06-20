@@ -1,0 +1,48 @@
+team_name: "IndianBisons"
+
+primary_contact:
+  name: "Aniruddha Adhikrao Jadhav"
+  email: "aniruddha.jadhav7@icloud.com"
+  phone: "+91-9876543210"
+
+team_members:
+  - name: "Aniruddha Adhikrao Jadhav"
+    email: "[EMAIL_ADDRESS]"
+    role: "System and Backend Architect"
+  - name: "Aman Sham Naurangabadi"
+    email: "[EMAIL_ADDRESS]"
+    role: "Data Quality and Systems Tester"
+  - name: "Abdulkalam qureshi"
+    email: "[EMAIL_ADDRESS]"
+    role: "System Infrastructure Engineer"
+  - name: "Akshay Patil"
+    email: "[EMAIL_ADDRESS]"
+    role: "Frotend Engineer"
+
+github_repo: "https://github.com/aniruddhajadhav7/ZenithRank"
+sandbox_link: "https://zenithrank-demo.streamlit.app"
+
+reproduce_command: "python rank.py --candidates ./candidates.jsonl.gz --out ./submission.csv"
+
+runtime_summary:
+  wall_clock_time: "~22 seconds"
+  peak_memory_usage: "780 MB RAM"
+  hardware_target: "Isolated 16GB CPU Docker Sandbox Container"
+
+ai_tools_declared:
+  - "Claude"
+
+methodology_summary: |
+  A robust offline multi-stage matching engine combining a sparse TF-IDF token vector
+  space with a cascade of programmatic trajectory and behavioral modifiers.
+  Features a strict pre-filter step that analyzes profile structures for synthetic
+  data noise and chronological traps to enforce a 0% honeypot presence.
+  Incorporates a deterministic multi-key sort to satisfy validator tie-breaking constraints,
+  running completely locally on a single CPU core.
+
+declarations:
+  read_submission_spec: true
+  code_is_original_work: true
+  no_collusion: true
+  honeypot_check_done: true
+  reproduction_tested: true
