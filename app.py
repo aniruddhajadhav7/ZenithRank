@@ -49,7 +49,7 @@ MAX_SANDBOX_CANDIDATES = 100
 
 st.set_page_config(
     page_title="ZenithRank | Recruiter Sandbox Dashboard",
-    page_icon="🎯",
+    page_icon="logo.png",
     layout="wide",
     initial_sidebar_state="expanded",
 )
@@ -484,7 +484,7 @@ if uploaded_file is not None:
     """, unsafe_allow_html=True)
 
     # ── Execute button ───────────────────────────────────────────────
-    if st.button("🚀 Execute ZenithRank Matching Logic", type="primary", use_container_width=True):
+    if st.button("Execute ZenithRank Matching Logic", type="primary", use_container_width=True):
         t_start = time.perf_counter()
 
         # ── Setup TF-IDF vector space ────────────────────────────────
@@ -756,7 +756,11 @@ else:
 st.markdown('<div class="zen-divider"></div>', unsafe_allow_html=True)
 st.markdown("""
 <div style="text-align:center; color:#475569; font-size:0.78rem; padding:1rem 0;">
-    ZenithRank v1.0.0 · Built by Aniruddha Adhikrao Jadhav · Offline CPU Sandboxed Environment<br>
-    <span style="color:#64748B;">Redrob AI — Candidate Discovery Challenge</span>
+    ZenithRank v1.0.0 · Built by IndianBisons (Aman Naurangabadi, Aniruddha Jadhav, Abdulkalam Qureshi, Akshay Patil)<br>
+    <span style="color:#64748B;">Redrob AI — Best Candidate Discovery Challenge</span>
 </div>
 """, unsafe_allow_html=True)
+
+
+
+
