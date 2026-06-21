@@ -36,8 +36,9 @@ Instead of pure keyword matching, we engineered a deterministic trajectory multi
 ### 🧠 Stage 3: Dynamic Fact-Anchored Reasoning (`pipeline/reasoning_agent.py`)
 To survive Stage 4 manual reviews without LLMs, our reasoning engine dynamically strings together verified, factual extractions from the raw JSON (exact YOE, actual current title, real matched skills, and engagement metrics). **It completely avoids rigid templating** by building organic, varied sentence structures based on the candidate's specific trajectory, guaranteeing high-quality, hallucination-free justifications.
 
-### 🔌 Architecture Portability
-While our metrics and domain tokens are strictly hardcoded to maximize NDCG for the "Senior AI Engineer" hackathon ground truth, **the architecture itself is universally portable.** By simply swapping the `IDEAL_CANDIDATE_QUERY` configuration, this exact pipeline will flawlessly rank Frontend Developers, DevOps Engineers, or any other role using the exact same mathematical trajectory multipliers.
+> [!IMPORTANT]
+> **Universal Architecture Portability**  
+> While our metrics and domain tokens are strictly hardcoded to maximize the NDCG metric for the **"Senior AI Engineer"** hackathon ground truth, **our core architecture is universally portable.** By simply swapping the `IDEAL_CANDIDATE_QUERY` configuration, this exact 3-stage engine will flawlessly rank Frontend Developers, Product Managers, or any other role using the exact same mathematical trajectory multipliers!
 
 ---
 
