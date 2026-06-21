@@ -88,7 +88,7 @@ streamlit run app.py
 ---
 
 ## 👥 Team Information: IndianBisons
-Built by data engineers and applied AI practitioners.
+Built by Software & Infrastructure engineers and applied AI practitioners.
 - **Aman Naurangabadi**
 - **Aniruddha Jadhav**
 - **Abdulkalam Qureshi**
