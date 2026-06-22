@@ -1,0 +1,1253 @@
+diff --git a/app.py b/app.py
+index a8105b2..ce7d723 100644
+--- a/app.py
++++ b/app.py
+@@ -1,18 +1,17 @@
+ #!/usr/bin/env python3
+-"""
+-ZenithRank — Recruiter Sandbox Dashboard
+-==========================================
+-
+-A production-grade Streamlit application serving as the official hosted
+-Sandbox Demo for the ZenithRank talent intelligence platform.
+-
+-Integrates with pipeline.anti_trap, pipeline.feature_engine, and
+-pipeline.reasoning_agent to process test batches of ≤100 candidate
+-profiles completely offline within the sandbox environment.
+-
+-Usage:
+-    streamlit run app.py
+-"""
++# """
++# ZenithRank — Recruiter Intelligence Engine
++# =========================================
++# 
++# A production-grade talent intelligence gateway designed to process high-throughput 
++# candidate profile streams, evaluate core semantic alignment metrics, and generate 
++# server-compliant verification shortlists completely offline.
++# 
++# Operational Significance:
++#   - Automates semantic vector alignment using structured domain vocabularies.
++#   - Mitigates profile spoofing and adversarial text loop manipulations in real time.
++#   - Accelerates enterprise candidate shortlisting with rigorous sorting operations.
++# """
+ 
+ import csv
+ import io
+@@ -46,394 +45,506 @@ MAX_SANDBOX_CANDIDATES = 100
+ # ═══════════════════════════════════════════════════════════════════════════════
+ # PAGE CONFIG
+ # ═══════════════════════════════════════════════════════════════════════════════
++"""
++ZenithRank — Recruiter Intelligence Engine
++=========================================
++
++
++A production-grade talent intelligence gateway designed to process high-throughput 
++candidate profile streams, evaluate core semantic alignment metrics, and generate 
++server-compliant verification shortlists completely offline.
+ 
++
++Operational Significance:
++  - Automates semantic vector alignment using structured domain vocabularies.
++  - Mitigates profile spoofing and adversarial text loop manipulations in real time.
++  - Accelerates enterprise candidate shortlisting with rigorous sorting operations.
++"""
+ st.set_page_config(
+-    page_title="ZenithRank | Recruiter Sandbox Dashboard",
+-    page_icon="logo.png",
++    page_title="ZenithRank | Intelligence Engine",
++    page_icon="👑",
+     layout="wide",
+     initial_sidebar_state="expanded",
+ )
+ 
+ # ═══════════════════════════════════════════════════════════════════════════════
+-# CUSTOM CSS — Premium recruiter-grade styling
++# THEME CONFIGURATION — Premium Black, Silver & Gold (Glassmorphic Reconstruct)
+ # ═══════════════════════════════════════════════════════════════════════════════
+ 
+ st.markdown("""
+ <style>
+-    /* ── Google Font import ─────────────────────────────────────────── */
+-    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap');
++    /* ====================================
++       IMPORTS & GLOBAL SYSTEM OVERRIDES
++    ==================================== */
++    @import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@600;800&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap');
+ 
+-    /* ── Global overrides ───────────────────────────────────────────── */
+     html, body, [class*="css"] {
+-        font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
++        font-family: 'Plus Jakarta Sans', sans-serif;
+     }
+ 
++    /* ====================================
++       APP BACKGROUND (MATTE LUXURY VOID)
++    ==================================== */
+     .stApp {
+-        background: linear-gradient(135deg, #0F172A 0%, #1E293B 50%, #0F172A 100%);
++        background:
++            radial-gradient(circle at top left, rgba(212, 175, 55, 0.08) 0%, transparent 35%),
++            radial-gradient(circle at bottom right, rgba(255, 255, 255, 0.02) 0%, transparent 35%),
++            linear-gradient(135deg, #050507 0%, #0A0A0F 40%, #050507 100%);
++        color: white;
+     }
+ 
+-    /* ── Remove default Streamlit padding ────────────────────────────── */
++    /* ====================================
++       MAIN CONTAINER
++    ==================================== */
+     .block-container {
+         padding-top: 2rem;
+         padding-bottom: 2rem;
++        max-width: 1500px;
+     }
+ 
+-    /* ── Hero header ────────────────────────────────────────────────── */
+-    .hero-container {
+-        background: linear-gradient(135deg, rgba(37, 99, 235, 0.15) 0%, rgba(124, 58, 237, 0.10) 100%);
+-        border: 1px solid rgba(99, 102, 241, 0.2);
+-        border-radius: 16px;
+-        padding: 2rem 2.5rem;
+-        margin-bottom: 1.5rem;
++    /* ====================================
++       CORNER TEAM LOGO COMPONENT CONTAINER
++    ==================================== */
++    .corner-logo-container {
++        position: absolute;
++        top: 15px;
++        right: 25px;
++        display: flex;
++        align-items: center;
++        gap: 12px;
++        background: rgba(10, 10, 15, 0.85);
++        border: 1px solid rgba(212, 175, 55, 0.25);
++        padding: 8px 18px;
++        border-radius: 30px;
+         backdrop-filter: blur(20px);
+-        position: relative;
+-        overflow: hidden;
++        -webkit-backdrop-filter: blur(20px);
++        z-index: 999;
++        box-shadow: 0 4px 20px rgba(0,0,0,0.5);
+     }
+-    .hero-container::before {
+-        content: '';
+-        position: absolute;
+-        top: 0; left: 0; right: 0;
+-        height: 3px;
+-        background: linear-gradient(90deg, #3B82F6, #8B5CF6, #06B6D4, #3B82F6);
+-        background-size: 300% 100%;
+-        animation: shimmer 3s ease-in-out infinite;
+-    }
+-    @keyframes shimmer {
+-        0%, 100% { background-position: 0% 50%; }
+-        50% { background-position: 100% 50%; }
+-    }
+-    .hero-title {
+-        font-size: 2.4rem;
++    .corner-logo-text {
++        font-family: 'Cinzel', serif;
++        font-size: 0.75rem;
+         font-weight: 800;
+-        background: linear-gradient(135deg, #60A5FA, #A78BFA, #34D399);
++        letter-spacing: 2px;
++        background: linear-gradient(135deg, #FFFFFF 0%, #D4AF37 100%);
+         -webkit-background-clip: text;
+         -webkit-text-fill-color: transparent;
+-        background-clip: text;
+-        margin-bottom: 0.3rem;
+-        letter-spacing: -0.5px;
+     }
+-    .hero-subtitle {
+-        font-size: 1.05rem;
+-        color: #94A3B8;
+-        font-weight: 400;
+-        line-height: 1.6;
++    
++    .corner-logo-img-wrapper img {
++        width: 22px;
++        height: 22px;
++        object-fit: contain;
++        filter: drop-shadow(0px 0px 4px rgba(212, 175, 55, 0.6));
+     }
+ 
+-    /* ── Metric cards ───────────────────────────────────────────────── */
+-    .metric-card {
+-        border-radius: 14px;
+-        padding: 1.5rem 1.8rem;
+-        text-align: center;
+-        transition: transform 0.25s ease, box-shadow 0.25s ease;
++    /* ====================================
++       CINEMATIC GLASS HERO SECTION
++    ==================================== */
++    .bison-hero-canvas {
+         position: relative;
++        padding: 45px 50px;
++        border-radius: 24px;
++        background: linear-gradient(135deg, rgba(255, 255, 255, 0.02), rgba(212, 175, 55, 0.02));
++        backdrop-filter: blur(20px);
++        -webkit-backdrop-filter: blur(20px);
+         overflow: hidden;
++        border: 1px solid rgba(255, 255, 255, 0.06);
++        margin-bottom: 30px;
++        box-shadow: 0 20px 50px rgba(0, 0, 0, 0.4);
+     }
+-    .metric-card:hover {
+-        transform: translateY(-4px);
+-        box-shadow: 0 12px 40px rgba(0, 0, 0, 0.3);
+-    }
+-    .metric-card::after {
+-        content: '';
++    
++    .bison-hero-canvas::after {
++        content: '𓃬';
+         position: absolute;
+-        top: 0; left: 0; right: 0;
+-        height: 3px;
++        right: 5%;
++        top: -15%;
++        font-size: 13rem;
++        color: rgba(212, 175, 55, 0.02);
++        font-family: serif;
++        pointer-events: none;
++        transform: rotate(-12deg);
+     }
+-    .metric-scanned {
+-        background: linear-gradient(135deg, rgba(37, 99, 235, 0.12) 0%, rgba(59, 130, 246, 0.08) 100%);
+-        border: 1px solid rgba(59, 130, 246, 0.25);
+-    }
+-    .metric-scanned::after { background: linear-gradient(90deg, #3B82F6, #60A5FA); }
+-    .metric-trapped {
+-        background: linear-gradient(135deg, rgba(239, 68, 68, 0.12) 0%, rgba(248, 113, 113, 0.08) 100%);
+-        border: 1px solid rgba(239, 68, 68, 0.25);
+-    }
+-    .metric-trapped::after { background: linear-gradient(90deg, #EF4444, #F87171); }
+-    .metric-matched {
+-        background: linear-gradient(135deg, rgba(16, 185, 129, 0.12) 0%, rgba(52, 211, 153, 0.08) 100%);
+-        border: 1px solid rgba(16, 185, 129, 0.25);
+-    }
+-    .metric-matched::after { background: linear-gradient(90deg, #10B981, #34D399); }
+ 
+-    .metric-icon { font-size: 2rem; margin-bottom: 0.3rem; }
+-    .metric-label {
+-        font-size: 0.78rem;
+-        font-weight: 600;
++    .hero-tagline {
++        font-family: 'Cinzel', serif;
++        font-size: 0.8rem;
++        color: #D4AF37;
++        letter-spacing: 3px;
+         text-transform: uppercase;
+-        letter-spacing: 1.2px;
+         margin-bottom: 0.5rem;
+     }
+-    .metric-scanned .metric-label { color: #60A5FA; }
+-    .metric-trapped .metric-label { color: #F87171; }
+-    .metric-matched .metric-label { color: #34D399; }
+ 
+-    .metric-value {
+-        font-size: 2.8rem;
++    .hero-title-main {
++        font-size: 3rem;
+         font-weight: 800;
++        line-height: 1.1;
+         letter-spacing: -1px;
+-        line-height: 1;
++        background: linear-gradient(90deg, #FFFFFF, #E2E8F0, #D4AF37);
++        -webkit-background-clip: text;
++        -webkit-text-fill-color: transparent;
++        margin-bottom: 1rem;
+     }
+-    .metric-scanned .metric-value { color: #93C5FD; }
+-    .metric-trapped .metric-value { color: #FCA5A5; }
+-    .metric-matched .metric-value { color: #6EE7B7; }
+ 
+-    /* ── Section headers ────────────────────────────────────────────── */
+-    .section-header {
+-        font-size: 1.3rem;
+-        font-weight: 700;
++    .hero-description {
++        font-size: 1.02rem;
+         color: #E2E8F0;
+-        margin: 1.5rem 0 1rem 0;
+-        padding-bottom: 0.5rem;
+-        border-bottom: 2px solid rgba(99, 102, 241, 0.3);
+-        display: flex;
+-        align-items: center;
+-        gap: 0.5rem;
++        max-width: 950px;
++        line-height: 1.6;
++        font-weight: 400;
++        margin-bottom: 1.25rem;
+     }
+ 
+-    /* ── Upload zone ────────────────────────────────────────────────── */
+-    .upload-zone {
+-        background: linear-gradient(135deg, rgba(30, 41, 59, 0.8) 0%, rgba(15, 23, 42, 0.9) 100%);
+-        border: 2px dashed rgba(99, 102, 241, 0.35);
+-        border-radius: 14px;
+-        padding: 1.5rem;
+-        margin-bottom: 1rem;
+-        transition: border-color 0.3s ease;
++    .operational-significance-box {
++        background: rgba(212, 175, 55, 0.03);
++        border: 1px solid rgba(212, 175, 55, 0.15);
++        border-radius: 12px;
++        padding: 18px 22px;
++        margin-top: 1rem;
+     }
+-    .upload-zone:hover {
+-        border-color: rgba(99, 102, 241, 0.6);
++
++    .operational-title {
++        font-size: 0.85rem;
++        font-weight: 700;
++        color: #D4AF37;
++        text-transform: uppercase;
++        letter-spacing: 1.5px;
++        margin-bottom: 0.5rem;
+     }
+ 
+-    /* ── Token chip display ─────────────────────────────────────────── */
+-    .token-grid {
+-        display: flex;
+-        flex-wrap: wrap;
+-        gap: 8px;
+-        margin-top: 0.5rem;
+-    }
+-    .token-chip {
+-        background: linear-gradient(135deg, rgba(99, 102, 241, 0.15), rgba(139, 92, 246, 0.10));
+-        border: 1px solid rgba(99, 102, 241, 0.3);
+-        color: #A5B4FC;
+-        padding: 5px 14px;
+-        border-radius: 20px;
+-        font-size: 0.78rem;
+-        font-weight: 500;
+-        font-family: 'Inter', monospace;
+-        letter-spacing: 0.3px;
+-        transition: all 0.2s ease;
+-    }
+-    .token-chip:hover {
+-        background: linear-gradient(135deg, rgba(99, 102, 241, 0.3), rgba(139, 92, 246, 0.2));
+-        transform: scale(1.05);
+-    }
+-
+-    /* ── Info callout panel ──────────────────────────────────────────── */
+-    .info-callout {
+-        background: linear-gradient(135deg, rgba(6, 182, 212, 0.08), rgba(59, 130, 246, 0.06));
+-        border: 1px solid rgba(6, 182, 212, 0.25);
+-        border-radius: 12px;
+-        padding: 1rem 1.3rem;
+-        color: #67E8F9;
+-        font-size: 0.9rem;
++    .operational-list {
++        margin: 0;
++        padding-left: 20px;
++        color: #94A3B8;
++        font-size: 0.92rem;
+         line-height: 1.5;
+-        margin: 1rem 0;
+     }
+-    .info-callout strong { color: #A5F3FC; }
+ 
+-    /* ── Pipeline stage badges ──────────────────────────────────────── */
+-    .stage-badge {
+-        display: inline-flex;
+-        align-items: center;
+-        gap: 6px;
+-        padding: 6px 14px;
+-        border-radius: 8px;
+-        font-size: 0.8rem;
+-        font-weight: 600;
+-        margin: 3px 4px;
++    .operational-list li {
++        margin-bottom: 0.35rem;
++    }
++
++    .operational-list li strong {
++        color: #F8FAFC;
++    }
++
++    /* ====================================
++       GLASS METRIC DISPLAY CARDS
++    ==================================== */
++    .stat-card {
++        position: relative;
++        padding: 30px;
++        border-radius: 24px;
++        background: rgba(255, 255, 255, 0.03);
++        backdrop-filter: blur(20px);
++        -webkit-backdrop-filter: blur(20px);
++        border: 1px solid rgba(255, 255, 255, 0.06);
++        overflow: hidden;
++        transition: 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+     }
+-    .stage-0 {
+-        background: rgba(239, 68, 68, 0.15);
+-        border: 1px solid rgba(239, 68, 68, 0.3);
+-        color: #FCA5A5;
++    .stat-card:hover {
++        transform: translateY(-6px);
++        box-shadow: 0 20px 40px rgba(212, 175, 55, 0.1);
+     }
+-    .stage-1 {
+-        background: rgba(59, 130, 246, 0.15);
+-        border: 1px solid rgba(59, 130, 246, 0.3);
+-        color: #93C5FD;
++    .stat-card::before {
++        content: '';
++        position: absolute;
++        inset: 0;
++        padding: 1px;
++        border-radius: 24px;
++        background: linear-gradient(135deg, rgba(255,255,255,0.1), rgba(212,175,55,0.2));
++        -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
++        -webkit-mask-composite: xor;
++        mask-composite: exclude;
++    }
++    .stat-label {
++        font-size: 0.72rem;
++        font-weight: 700;
++        color: #64748B;
++        text-transform: uppercase;
++        letter-spacing: 2px;
+     }
+-    .stage-2 {
+-        background: rgba(16, 185, 129, 0.15);
+-        border: 1px solid rgba(16, 185, 129, 0.3);
+-        color: #6EE7B7;
++    .stat-value {
++        font-size: 3.2rem;
++        font-weight: 800;
++        margin-top: 10px;
++        line-height: 1;
+     }
+-
+-    /* ── Sidebar styling ────────────────────────────────────────────── */
+-    section[data-testid="stSidebar"] {
+-        background: linear-gradient(180deg, #0F172A 0%, #1E293B 100%);
+-        border-right: 1px solid rgba(99, 102, 241, 0.15);
++    /* Variant Text Highlights */
++    .stat-gold .stat-value {
++        background: linear-gradient(135deg, #FFFFFF 0%, #D4AF37 100%);
++        -webkit-background-clip: text;
++        -webkit-text-fill-color: transparent;
+     }
+-    section[data-testid="stSidebar"] .stMarkdown h1 {
+-        background: linear-gradient(135deg, #60A5FA, #A78BFA);
++    .stat-silver .stat-value {
++        background: linear-gradient(135deg, #FFFFFF 0%, #94A3B8 100%);
+         -webkit-background-clip: text;
+         -webkit-text-fill-color: transparent;
+-        background-clip: text;
+-        font-size: 1.5rem;
++    }
++    .stat-dark .stat-value {
++        color: #475569;
+     }
+ 
+-    /* ── Dataframe styling ──────────────────────────────────────────── */
+-    .stDataFrame {
+-        border-radius: 12px;
+-        overflow: hidden;
++    /* ====================================
++       SECTION HEADERS
++    ==================================== */
++    .premium-header {
++        font-family: 'Cinzel', serif;
++        font-size: 1.1rem;
++        font-weight: 600;
++        color: #FFFFFF;
++        letter-spacing: 2px;
++        margin: 2.5rem 0 1.25rem 0;
++        display: flex;
++        align-items: center;
++        gap: 15px;
++    }
++    .premium-header::after {
++        content: '';
++        flex: 1;
++        height: 1px;
++        background: linear-gradient(90deg, rgba(212, 175, 55, 0.4), transparent);
+     }
+ 
+-    /* ── Download button styling ────────────────────────────────────── */
+-    .stDownloadButton > button {
+-        background: linear-gradient(135deg, #3B82F6, #8B5CF6) !important;
+-        color: white !important;
+-        border: none !important;
+-        border-radius: 10px !important;
+-        padding: 0.7rem 2rem !important;
+-        font-weight: 600 !important;
+-        font-size: 0.95rem !important;
+-        letter-spacing: 0.3px !important;
+-        transition: all 0.3s ease !important;
+-        box-shadow: 0 4px 15px rgba(59, 130, 246, 0.3) !important;
+-    }
+-    .stDownloadButton > button:hover {
++    /* ====================================
++       GLASS FILE UPLOAD TARGET
++    ==================================== */
++    .premium-upload-box {
++        padding: 40px;
++        text-align: center;
++        border-radius: 24px;
++        border: 2px dashed rgba(212, 175, 55, 0.3);
++        background: rgba(255, 255, 255, 0.02);
++        transition: 0.3s ease;
++        margin-bottom: 1rem;
++    }
++    .premium-upload-box:hover {
++        border-color: #D4AF37;
++        background: rgba(212, 175, 55, 0.04);
++    }
++
++    /* ====================================
++       INTERACTIVE ACCESS CONTROL BUTTONS
++    ==================================== */
++    .stButton button {
++        background: linear-gradient(135deg, #16161A, #0A0A0C) !important;
++        color: #D4AF37 !important;
++        border: 1px solid rgba(212, 175, 55, 0.4) !important;
++        border-radius: 18px !important;
++        font-weight: 700 !important;
++        height: 54px !important;
++        letter-spacing: 1.5px !important;
++        text-transform: uppercase !important;
++        font-size: 0.85rem !important;
++        transition: 0.3s cubic-bezier(0.16, 1, 0.3, 1) !important;
++        width: 100%;
++        box-shadow: 0 4px 15px rgba(0,0,0,0.4) !important;
++    }
++    .stButton button:hover {
+         transform: translateY(-2px) !important;
+-        box-shadow: 0 8px 25px rgba(59, 130, 246, 0.4) !important;
++        border-color: #D4AF37 !important;
++        box-shadow: 0 15px 40px rgba(212, 175, 55, 0.15) !important;
++        color: #FFFFFF !important;
+     }
+-
+-    /* ── Primary button styling ─────────────────────────────────────── */
++    /* Execution Trigger Hierarchy */
+     .stButton > button[kind="primary"] {
+-        background: linear-gradient(135deg, #3B82F6, #6366F1) !important;
++        background: linear-gradient(135deg, #D4AF37, #AA8415) !important;
++        color: #050507 !important;
+         border: none !important;
+-        border-radius: 10px !important;
+-        font-weight: 600 !important;
+-        letter-spacing: 0.3px !important;
+-        box-shadow: 0 4px 15px rgba(59, 130, 246, 0.3) !important;
+-        transition: all 0.3s ease !important;
+     }
+     .stButton > button[kind="primary"]:hover {
+-        transform: translateY(-2px) !important;
+-        box-shadow: 0 8px 25px rgba(99, 102, 241, 0.4) !important;
++        box-shadow: 0 15px 40px rgba(212, 175, 55, 0.35) !important;
++        color: #050507 !important;
+     }
+ 
+-    /* ── Expander styling ───────────────────────────────────────────── */
+-    .streamlit-expanderHeader {
+-        background: rgba(30, 41, 59, 0.6) !important;
+-        border-radius: 10px !important;
+-        color: #CBD5E1 !important;
+-        font-weight: 500 !important;
++    /* ====================================
++       SIDEBAR INTERFACE STRUCTURING
++    ==================================== */
++    section[data-testid="stSidebar"] {
++        background: rgba(8, 8, 12, 0.85) !important;
++        backdrop-filter: blur(30px);
++        -webkit-backdrop-filter: blur(30px);
++        border-right: 1px solid rgba(255, 255, 255, 0.05);
++    }
++    section[data-testid="stSidebar"] .stMarkdown h4 {
++        font-family: 'Cinzel', serif !important;
++        color: #D4AF37 !important;
++        font-size: 0.85rem !important;
++        letter-spacing: 1.5px;
++    }
++    .sidebar-panel {
++        background: rgba(255, 255, 255, 0.02);
++        border: 1px solid rgba(255, 255, 255, 0.04);
++        border-radius: 14px;
++        padding: 1.2rem;
++        margin-bottom: 1.2rem;
++    }
++    .sidebar-row {
++        font-size: 0.85rem;
++        color: #94A3B8;
++        margin-bottom: 0.5rem;
++        display: flex;
++        justify-content: space-between;
+     }
++    .sidebar-row strong { color: #E2E8F0; }
+ 
+-    /* ── Hide default streamlit footer ──────────────────────────────── */
+-    footer { visibility: hidden; }
++    /* ====================================
++       DATAFRAME GLASS OVERRIDES
++    ==================================== */
++    .stDataFrame {
++        border-radius: 24px !important;
++        overflow: hidden;
++        border: 1px solid rgba(255, 255, 255, 0.06) !important;
++        background: rgba(10, 10, 14, 0.4);
++    }
+ 
+-    /* ── Divider line ───────────────────────────────────────────────── */
+-    .zen-divider {
++    /* ====================================
++       TOKEN CHIPS & UTILITIES
++    ==================================== */
++    .token-flex-container {
++        display: flex;
++        flex-wrap: wrap;
++        gap: 8px;
++        padding: 10px 0;
++    }
++    .luxury-chip {
++        background: rgba(255, 255, 255, 0.02);
++        border: 1px solid rgba(255, 255, 255, 0.05);
++        color: #94A3B8;
++        padding: 6px 14px;
++        border-radius: 8px;
++        font-size: 0.8rem;
++        transition: 0.2s;
++    }
++    .luxury-chip:hover {
++        border-color: #D4AF37;
++        color: #FFFFFF;
++    }
++    .streamlit-expanderHeader {
++        background: rgba(255, 255, 255, 0.02) !important;
++        border: 1px solid rgba(255, 255, 255, 0.05) !important;
++        border-radius: 14px !important;
++        color: #E2E8F0 !important;
++    }
++    .premium-divider {
+         height: 1px;
+-        background: linear-gradient(90deg, transparent, rgba(99, 102, 241, 0.3), transparent);
+-        margin: 1.5rem 0;
+-        border: none;
++        background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.06), transparent);
++        margin: 3rem 0 1.5rem 0;
+     }
++
++    /* ====================================
++       HIGH CONTRAST GLASS SCROLLBAR
++    ==================================== */
++    ::-webkit-scrollbar { width: 6px; height: 6px; }
++    ::-webkit-scrollbar-thumb { background: rgba(212, 175, 55, 0.4); border-radius: 20px; }
++    ::-webkit-scrollbar-track { background: transparent; }
++
++    /* Hide default platform rules */
++    footer { visibility: hidden; }
+ </style>
++
++<div class="corner-logo-container">
++    <div class="corner-logo-img-wrapper">
++        <img src="app/static/logo.png" onerror="this.src='logo.png';">
++    </div>
++    <div class="corner-logo-text">INDIAN BISONS</div>
++</div>
+ """, unsafe_allow_html=True)
+ 
+ 
+ # ═══════════════════════════════════════════════════════════════════════════════
+-# SIDEBAR
++# SIDEBAR NAVIGATION & META CONFIG
+ # ═══════════════════════════════════════════════════════════════════════════════
+ 
+ with st.sidebar:
+-    st.image("logo.png", use_container_width=True)
+-    st.markdown('<div class="zen-divider"></div>', unsafe_allow_html=True)
++    st.markdown("<div style='padding: 1rem 0 0.5rem 0; text-align:center;'><h2 style='font-family:Cinzel, serif; color:#FFF; font-size:1.4rem; letter-spacing:2px;'>ZENITHRANK</h2></div>", unsafe_allow_html=True)
++    st.markdown("<div style='height: 1px; background: linear-gradient(90deg, transparent, rgba(212,175,55,0.3), transparent); margin-bottom: 1.5rem;'></div>", unsafe_allow_html=True)
+ 
+-    st.markdown("#### 📋 Active Evaluation Mandate")
++    st.markdown("#### 📋 TARGET MANDATE")
+     st.markdown("""
+-    <div class="info-callout">
+-        <strong>Role:</strong> Senior AI Engineer<br>
+-        <strong>Team:</strong> Founding Team — Redrob AI<br>
+-        <strong>Domain:</strong> Search & Retrieval at Scale<br>
+-        <strong>YOE Target:</strong> 5–9 years
++    <div class="sidebar-panel">
++        <div class="sidebar-row"><span>Role:</span><strong>Senior AI Engineer</strong></div>
++        <div class="sidebar-row"><span>Team:</span><strong>Founding Team · Redrob</strong></div>
++        <div class="sidebar-row"><span>Domain:</span><strong>Information Retrieval</strong></div>
++        <div class="sidebar-row"><span>Target:</span><strong>5–9 Years YOE</strong></div>
+     </div>
+     """, unsafe_allow_html=True)
+ 
+-    st.markdown('<div class="zen-divider"></div>', unsafe_allow_html=True)
+-
+-    st.markdown("#### 🛡️ Pipeline Safeguards")
++    st.markdown("#### 🛡️ PIPELINE SAFEGUARDS")
+     st.markdown("""
+-        <span class="stage-badge stage-0">🚨 Stage 0 — Anti-Honeypot Shield</span><br>
+-        <span class="stage-badge stage-1">🔍 Stage 1 — Sparse Vector Engine</span><br>
+-        <span class="stage-badge stage-2">⚡ Stage 2 — Intent Multiplier Matrix</span>
++    <div class="sidebar-panel" style="gap: 8px; display: flex; flex-direction: column;">
++        <div style="font-size:0.75rem; color:#FCA5A5; letter-spacing:0.5px;">● STAGE 0 — ANTI-HONEYPOT SHIELD</div>
++        <div style="font-size:0.75rem; color:#93C5FD; letter-spacing:0.5px;">● STAGE 1 — SPARSE VECTOR MATRIX</div>
++        <div style="font-size:0.75rem; color:#6EE7B7; letter-spacing:0.5px;">● STAGE 2 — INTENT MULTIPLIER</div>
++    </div>
+     """, unsafe_allow_html=True)
+ 
+-    st.markdown('<div class="zen-divider"></div>', unsafe_allow_html=True)
+-
+-    st.markdown("#### ⚙️ Engine Parameters")
++    st.markdown("#### ⚙️ ENGINE PARAMETERS")
+     st.markdown("""
+-    <div class="info-callout" style="font-size: 0.82rem;">
+-        <strong>TF-IDF Vocabulary:</strong> 23 domain tokens<br>
+-        <strong>N-gram Range:</strong> (1, 2)<br>
+-        <strong>Max Sandbox Batch:</strong> 100 profiles<br>
+-        <strong>Tie-Breaker:</strong> Ascending candidate_id<br>
+-        <strong>Output Schema:</strong> candidate_id, rank, score, reasoning
++    <div class="sidebar-panel" style="font-size: 0.8rem; color:#64748B;">
++        <div class="sidebar-row"><span>Vocabulary:</span><span>23 Domain Tokens</span></div>
++        <div class="sidebar-row"><span>N-gram Range:</span><span>(1, 2)</span></div>
++        <div class="sidebar-row"><span>Batch Size Limit:</span><span>100 Profiles</span></div>
++        <div class="sidebar-row"><span>Tie-Breaker:</span><span>candidate_id (Asc)</span></div>
+     </div>
+     """, unsafe_allow_html=True)
+-
+-    st.markdown('<div class="zen-divider"></div>', unsafe_allow_html=True)
+-    st.caption("ZenithRank Engine v1.0.0 · Offline CPU Sandboxed")
++    
++    st.caption("Engine Core v1.0.0 · Offline Operational Environment")
+ 
+ 
+ # ═══════════════════════════════════════════════════════════════════════════════
+-# HERO HEADER
++# HERO HEADER (CLEAN OPERATIONAL DESCRIPTION OUTPUT)
+ # ═══════════════════════════════════════════════════════════════════════════════
+ 
+ st.markdown("""
+-<div class="hero-container">
+-    <div class="hero-title">ZenithRank Talent Intelligence Sandbox</div>
+-    <div class="hero-subtitle">
+-        Stream candidate profile data feeds, isolate synthetic text loops and chronological honeypots,
+-        and output server-validated shortlists — all running offline on a single CPU core.
++<div class="bison-hero-canvas">
++    <div class="hero-tagline">Indian Bisons Deployment</div>
++    <div class="hero-title-main">ZenithRank Recruiter Intelligence Engine</div>
++    <div class="hero-description">
++        A production-grade talent intelligence gateway designed to process high-throughput 
++        candidate profile streams, evaluate core semantic alignment metrics, and generate 
++        server-compliant verification shortlists completely offline.
++    </div>
++    <div class="operational-significance-box">
++        <div class="operational-title">Operational Significance</div>
++        <ul class="operational-list">
++            <li><strong>Semantic Alignment Automation:</strong> Maps continuous target applicant tracking streams against highly structured, multi-dimensional domain token dictionaries.</li>
++            <li><strong>Real-time Loop Mitigation:</strong> Detects and neutralizes anomalous profile spoofing attempts, synthetic data constructs, and adversarial text loop manipulations instantly.</li>
++            <li><strong>Enterprise Shortlist Acceleration:</strong> Runs high-dimension structural vector sorting algorithms to provide rigorous candidate discovery transparency.</li>
++        </ul>
+     </div>
+ </div>
+ """, unsafe_allow_html=True)
+ 
+ 
+ # ═══════════════════════════════════════════════════════════════════════════════
+-# TOKEN SPACE VIEWER
++# EXPANDABLE TOKEN ARCHITECTURE
+ # ═══════════════════════════════════════════════════════════════════════════════
+ 
+-with st.expander("📐 View Target Semantic Verification Token Space", expanded=False):
+-    chips_html = "".join(
+-        f'<span class="token-chip">{token}</span>' for token in CORE_ARCHITECTURE_TOKENS
+-    )
+-    st.markdown(f'<div class="token-grid">{chips_html}</div>', unsafe_allow_html=True)
++with st.expander("📐 VIEW TARGET SEMANTIC VERIFICATION MATRIX", expanded=False):
++    chips_html = "".join(f'<span class="luxury-chip">{token}</span>' for token in CORE_ARCHITECTURE_TOKENS)
++    st.markdown(f'<div class="token-flex-container">{chips_html}</div>', unsafe_allow_html=True)
+     st.markdown("""
+-    <div class="info-callout" style="margin-top: 1rem;">
+-        These <strong>23 domain tokens</strong> define the TF-IDF vocabulary space used to compute
+-        baseline semantic alignment between each candidate's profile text and the target role specification.
+-        Scores are then modulated by trajectory multipliers from the feature engine.
++    <div style="color: #64748B; font-size: 0.85rem; margin-top: 0.5rem; line-height: 1.5;">
++        These 23 core domain tokens form the fixed dictionary space for calculating the structural alignment coefficient. 
++        Raw TF-IDF score targets are subsequently modulated via dynamic trajectory vector weights.
+     </div>
+     """, unsafe_allow_html=True)
+ 
+ 
+ # ═══════════════════════════════════════════════════════════════════════════════
+-# FILE UPLOAD
++# DATA INGESTION WORKFLOW
+ # ═══════════════════════════════════════════════════════════════════════════════
+ 
+-st.markdown(
+-    '<div class="section-header">📤 Upload Candidate Sample Data Feed</div>',
+-    unsafe_allow_html=True,
+-)
++st.markdown('<div class="premium-header">📤 DATASTREAM INGESTION ROUTINE</div>', unsafe_allow_html=True)
+ 
+ st.markdown("""
+-<div class="upload-zone">
+-    <div style="text-align:center; color:#94A3B8; font-size:0.9rem;">
+-        Drop your profile snippet file below<br>
+-        <span style="color:#64748B; font-size:0.8rem;">
+-            Supports <code style="color:#A5B4FC;">sample_candidates.json</code> (array) or
+-            <code style="color:#A5B4FC;">candidates.jsonl</code> (line-delimited)
+-        </span>
++<div class="premium-upload-box">
++    <div style="color: #E2E8F0; font-size: 0.9rem; font-weight: 500; margin-bottom: 0.25rem;">
++        Mount Candidate Target Payload File
++    </div>
++    <div style="color: #64748B; font-size: 0.8rem;">
++        Accepts structured arrays (<code style="color: #D4AF37;">sample_candidates.json</code>) or flat streams (<code style="color: #D4AF37;">candidates.jsonl</code>)
+     </div>
+ </div>
+ """, unsafe_allow_html=True)
+@@ -446,14 +557,13 @@ uploaded_file = st.file_uploader(
+ 
+ 
+ # ═══════════════════════════════════════════════════════════════════════════════
+-# PIPELINE EXECUTION
++# PIPELINE COMPILATION & DISCOVERY
+ # ═══════════════════════════════════════════════════════════════════════════════
+ 
+ if uploaded_file is not None:
+     file_contents = uploaded_file.getvalue().decode("utf-8").strip()
+     candidate_batch = []
+ 
+-    # ── Parse JSON array or JSONL lines ──────────────────────────────
+     try:
+         if file_contents.startswith("[") and file_contents.endswith("]"):
+             candidate_batch = json.loads(file_contents)
+@@ -463,31 +573,20 @@ if uploaded_file is not None:
+                 if line:
+                     candidate_batch.append(json.loads(line))
+     except Exception as e:
+-        st.error(f"❌ **Structural Parsing Exception:** Encountered validation error mapping text lines: `{str(e)}`")
++        st.error(f"❌ **Structural Parsing Exception:** Engine failure mapped payload configuration: `{str(e)}`")
+         st.stop()
+ 
+-    # ── Enforce sandbox batch limit ──────────────────────────────────
+     total_records = len(candidate_batch)
+     if total_records > MAX_SANDBOX_CANDIDATES:
+-        st.warning(
+-            f"⚠️ Sandbox limit: trimming input from **{total_records}** to "
+-            f"**{MAX_SANDBOX_CANDIDATES}** profiles for demo evaluation."
+-        )
++        st.warning(f"⚠️ Limit constraint exceeded: trimming incoming feed from {total_records} down to top {MAX_SANDBOX_CANDIDATES} profiles.")
+         candidate_batch = candidate_batch[:MAX_SANDBOX_CANDIDATES]
+         total_records = MAX_SANDBOX_CANDIDATES
+ 
+-    st.markdown(f"""
+-    <div class="info-callout">
+-        📦 <strong>Data stream active:</strong> Successfully cached
+-        <strong>{total_records}</strong> candidate profile records into the evaluation buffer.
+-    </div>
+-    """, unsafe_allow_html=True)
+-
+-    # ── Execute button ───────────────────────────────────────────────
+-    if st.button("Execute ZenithRank Matching Logic", type="primary", use_container_width=True):
++    # Trigger Evaluation Button
++    if st.button("EXECUTE PARALLEL MATCHING ENGINE", type="primary", use_container_width=True):
+         t_start = time.perf_counter()
+ 
+-        # ── Setup TF-IDF vector space ────────────────────────────────
++        # Vectorization Setup
+         vectorizer = TfidfVectorizer(
+             vocabulary={token: i for i, token in enumerate(CORE_ARCHITECTURE_TOKENS)},
+             ngram_range=(1, 2),
+@@ -497,24 +596,18 @@ if uploaded_file is not None:
+         shortlist_buffer = []
+         honeypots_defused = 0
+ 
+-        # ── Progress tracking ────────────────────────────────────────
+-        progress_bar = st.progress(0, text="Initialising pipeline stages...")
+-        status_container = st.empty()
++        progress_bar = st.progress(0, text="Staging processing nodes...")
+ 
+         for idx, candidate in enumerate(candidate_batch):
+             cid = candidate.get("candidate_id", "CAND_UNKNOWN")
+-            progress_pct = (idx + 1) / total_records
+-            progress_bar.progress(
+-                progress_pct,
+-                text=f"Analysing profile {idx + 1}/{total_records}  ·  `{cid}`",
+-            )
++            progress_bar.progress((idx + 1) / total_records, text=f"Evaluating Vector Arrays {idx + 1}/{total_records} · File Pointer: `{cid}`")
+ 
+-            # ── Stage 0: Anti-Trap Verification ──────────────────────
++            # Stage 0: Verification
+             if is_candidate_synthetic_trap(candidate):
+                 honeypots_defused += 1
+                 continue
+ 
+-            # ── Synthesize text corpus for TF-IDF ────────────────────
++            # Context Text Block Assembly
+             profile = candidate.get("profile", {})
+             skills = candidate.get("skills", [])
+             history = candidate.get("career_history", [])
+@@ -531,12 +624,12 @@ if uploaded_file is not None:
+             if not cleaned_corpus.strip():
+                 continue
+ 
+-            # ── Stage 1: Compute base cosine alignment ───────────────
++            # Stage 1: Similarity Core Mapping
+             cand_matrix = vectorizer.transform([cleaned_corpus])
+             base_cosine_score = float((cand_matrix * jd_vector_space.T).toarray()[0][0])
+ 
+             if base_cosine_score > 0:
+-                # ── Stage 2: Apply trajectory multipliers ────────────
++                # Stage 2: Intent Multipliers Matrix
+                 multiplier = compute_profile_multipliers(candidate)
+                 final_score = round(base_cosine_score * multiplier, 6)
+ 
+@@ -548,219 +641,109 @@ if uploaded_file is not None:
+ 
+         elapsed = time.perf_counter() - t_start
+         progress_bar.empty()
+-        status_container.empty()
+ 
+-        # ═════════════════════════════════════════════════════════════
+-        # RESULTS DISPLAY
+-        # ═════════════════════════════════════════════════════════════
+-
+-        st.markdown(f"""
+-        <div class="info-callout" style="text-align:center;">
+-            🏁 Pipeline evaluation completed in <strong>{elapsed:.2f}s</strong>
+-        </div>
+-        """, unsafe_allow_html=True)
+-
+-        # ── Metric cards ─────────────────────────────────────────────
++        # ── STATISTICAL LUXURY GRID ───────────────────────────────────
+         matches_found = len(shortlist_buffer)
+-
+-        col1, col2, col3 = st.columns(3, gap="medium")
+-        with col1:
++        
++        m_col1, m_col2, m_col3 = st.columns(3)
++        with m_col1:
+             st.markdown(f"""
+-            <div class="metric-card metric-scanned">
+-                <div class="metric-icon">📬</div>
+-                <div class="metric-label">Total Ingested Profiles</div>
+-                <div class="metric-value">{total_records}</div>
++            <div class="stat-card stat-silver">
++                <div class="stat-label">INGESTED FEEDS</div>
++                <div class="stat-value">{total_records}</div>
+             </div>
+             """, unsafe_allow_html=True)
+-        with col2:
++        with m_col2:
+             st.markdown(f"""
+-            <div class="metric-card metric-trapped">
+-                <div class="metric-icon">🚨</div>
+-                <div class="metric-label">Honeypots Caught & Dropped</div>
+-                <div class="metric-value">{honeypots_defused}</div>
++            <div class="stat-card stat-dark">
++                <div class="stat-label">DEFUSED TRAPS</div>
++                <div class="stat-value">{honeypots_defused}</div>
+             </div>
+             """, unsafe_allow_html=True)
+-        with col3:
++        with m_col3:
+             st.markdown(f"""
+-            <div class="metric-card metric-matched">
+-                <div class="metric-icon">🏆</div>
+-                <div class="metric-label">Qualified System Matches</div>
+-                <div class="metric-value">{matches_found}</div>
++            <div class="stat-card stat-gold">
++                <div class="stat-label">MATCHES ARCHITECTED</div>
++                <div class="stat-value">{matches_found}</div>
+             </div>
+             """, unsafe_allow_html=True)
+ 
+-        st.markdown('<div class="zen-divider"></div>', unsafe_allow_html=True)
++        # Processing Context Output
++        st.markdown(f"<div style='text-align:right; color:#64748B; font-size:0.8rem; margin-top:0.5rem;'>Pipeline computed completely in {elapsed:.4f} seconds</div>", unsafe_allow_html=True)
+ 
+-        # ── Build ranked DataFrame ───────────────────────────────────
++        # Data Frame Formulation
+         if shortlist_buffer:
+             results_df = pd.DataFrame(shortlist_buffer)
++            results_df = results_df.sort_values(by=["score", "candidate_id"], ascending=[False, True]).reset_index(drop=True)
+ 
+-            # MANDATORY SORT: score descending, candidate_id ascending (tie-breaker)
+-            results_df = results_df.sort_values(
+-                by=["score", "candidate_id"],
+-                ascending=[False, True],
+-            ).reset_index(drop=True)
+-
+-            # Slice to top 100
+             shortlist_output = results_df.head(100).copy()
+             shortlist_output["rank"] = range(1, len(shortlist_output) + 1)
+-
+-            # Generate fact-anchored justifications via Stage 2
+             shortlist_output["reasoning"] = shortlist_output.apply(
+-                lambda row: build_candidate_justification(
+-                    row["_candidate_record"], row["rank"], row["score"]
+-                ),
+-                axis=1,
++                lambda row: build_candidate_justification(row["_candidate_record"], row["rank"], row["score"]), axis=1
+             )
+ 
+-            # Final export columns in strict schema order
+             display_cols = ["candidate_id", "rank", "score", "reasoning"]
+             final_export_df = shortlist_output[display_cols].copy()
+ 
+-            # ── Shortlist table ──────────────────────────────────────
+-            st.markdown(
+-                '<div class="section-header">📋 System Generated Ranking Shortlist</div>',
+-                unsafe_allow_html=True,
+-            )
+-
++            # Result Shortlist Table
++            st.markdown('<div class="premium-header">📋 MACHINE-GENERATED EVALUATION RESULTS</div>', unsafe_allow_html=True)
+             st.dataframe(
+                 final_export_df,
+                 column_config={
+-                    "candidate_id": st.column_config.TextColumn(
+-                        "Candidate ID",
+-                        width="medium",
+-                    ),
+-                    "rank": st.column_config.NumberColumn(
+-                        "Rank",
+-                        format="%d",
+-                        width="small",
+-                    ),
+-                    "score": st.column_config.NumberColumn(
+-                        "Composite Score",
+-                        format="%.6f",
+-                        width="medium",
+-                    ),
+-                    "reasoning": st.column_config.TextColumn(
+-                        "Fact-Anchored Justification",
+-                        width="large",
+-                    ),
++                    "candidate_id": st.column_config.TextColumn("CANDIDATE HASH", width="medium"),
++                    "rank": st.column_config.NumberColumn("RANK", format="%d", width="small"),
++                    "score": st.column_config.NumberColumn("COMPOSITE SCORE", format="%.6f", width="medium"),
++                    "reasoning": st.column_config.TextColumn("FACT-ANCHORED EVIDENCE REPORT", width="large"),
+                 },
+                 use_container_width=True,
+                 hide_index=True,
+-                height=min(len(final_export_df) * 40 + 60, 600),
++                height=min(len(final_export_df) * 40 + 60, 500),
+             )
+ 
+-            # ── Score distribution chart ─────────────────────────────
+-            st.markdown(
+-                '<div class="section-header">📊 Score Distribution Across Shortlist</div>',
+-                unsafe_allow_html=True,
+-            )
++            # High contrast analytics breakdown
++            st.markdown('<div class="premium-header">📊 SIGNAL DECAY MATRIX</div>', unsafe_allow_html=True)
+             chart_df = final_export_df[["rank", "score"]].set_index("rank")
+-            st.area_chart(chart_df, color="#6366F1", use_container_width=True)
+-
+-            # ── CSV Export ───────────────────────────────────────────
+-            st.markdown('<div class="zen-divider"></div>', unsafe_allow_html=True)
+-            st.markdown(
+-                '<div class="section-header">💾 Export Server-Compliant Deliverable</div>',
+-                unsafe_allow_html=True,
+-            )
++            st.area_chart(chart_df, color="#D4AF37", use_container_width=True)
+ 
++            # Export Trigger Area
++            st.markdown('<div class="premium-header">💾 DOWNSTREAM METADATA EXPORT</div>', unsafe_allow_html=True)
+             csv_stream = io.StringIO()
+             final_export_df.to_csv(csv_stream, index=False, quoting=csv.QUOTE_MINIMAL)
+-            csv_payload = csv_stream.getvalue()
+-
++            
+             st.download_button(
+-                label="📥 Download Validated Submission CSV",
+-                data=csv_payload,
+-                file_name="sandbox_submission.csv",
++                label="EXPORT COMPLIANT PIPELINE DELIVERABLE (CSV)",
++                data=csv_stream.getvalue(),
++                file_name="zenithrank_bison_shortlist.csv",
+                 mime="text/csv",
+-                type="primary",
+                 use_container_width=True,
+             )
+ 
+-            st.markdown("""
+-            <div class="info-callout" style="margin-top: 1rem; font-size: 0.82rem;">
+-                ✅ Output schema: <code>candidate_id, rank, score, reasoning</code><br>
+-                ✅ Scores monotonically non-increasing by rank<br>
+-                ✅ Ties broken by ascending alphabetical candidate_id<br>
+-                ✅ UTF-8 encoded with minimal quoting
+-            </div>
+-            """, unsafe_allow_html=True)
+-
+         else:
+-            st.warning(
+-                "⚠️ Zero candidate records cleared the initial matching threshold. "
+-                "Try uploading profiles with IR/ML/Search experience."
+-            )
++            st.warning("No candidate profiles matched the specified architectural vectors.")
+ 
+ else:
+-    # ── Empty state ──────────────────────────────────────────────────
++    # Empty State Interface Component
+     st.markdown("""
+-    <div class="info-callout" style="text-align: center; padding: 2rem;">
+-        <div style="font-size: 3rem; margin-bottom: 0.5rem;">📂</div>
+-        <strong>Ready for evaluation</strong><br>
+-        Drop a <code>sample_candidates.json</code> array or <code>candidates.jsonl</code>
+-        file above to activate the pipeline and generate ranked shortlists.
+-    </div>
+-    """, unsafe_allow_html=True)
+-
+-    # ── How it works section ─────────────────────────────────────────
+-    st.markdown(
+-        '<div class="section-header">⚡ How the Pipeline Works</div>',
+-        unsafe_allow_html=True,
+-    )
+-
+-    stage_col1, stage_col2, stage_col3 = st.columns(3, gap="medium")
+-    with stage_col1:
+-        st.markdown("""
+-        <div class="metric-card metric-trapped" style="text-align:left;">
+-            <div style="font-size:1.3rem; margin-bottom:0.5rem;">🚨 Stage 0</div>
+-            <div style="color:#FCA5A5; font-weight:600; margin-bottom:0.4rem;">Anti-Honeypot Shield</div>
+-            <div style="color:#94A3B8; font-size:0.82rem; line-height:1.5;">
+-                Detects boilerplate text loops, chronological impossibilities
+-                (tenure > company age), and fake expert skills with 0 months duration.
+-                Removes all synthetic trap profiles before scoring.
+-            </div>
++    <div style="background: rgba(255,255,255,0.01); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); border: 1px solid rgba(255,255,255,0.05); border-radius: 24px; padding: 4rem 2rem; text-align: center; margin-top:2rem;">
++        <div style="font-size: 2.5rem; margin-bottom: 1rem; filter: grayscale(100%);">𓃬</div>
++        <div style="font-family: 'Cinzel', serif; font-size: 1rem; color: #D4AF37; letter-spacing: 2px; margin-bottom: 0.25rem;">
++            AWAITING INPUT TRANSACTION DATA
+         </div>
+-        """, unsafe_allow_html=True)
+-    with stage_col2:
+-        st.markdown("""
+-        <div class="metric-card metric-scanned" style="text-align:left;">
+-            <div style="font-size:1.3rem; margin-bottom:0.5rem;">🔍 Stage 1</div>
+-            <div style="color:#93C5FD; font-weight:600; margin-bottom:0.4rem;">Sparse Vector Engine</div>
+-            <div style="color:#94A3B8; font-size:0.82rem; line-height:1.5;">
+-                Computes TF-IDF cosine similarity against 23 domain tokens
+-                covering IR, search, ranking, vector databases, and evaluation
+-                metrics. Multiplied by trajectory and intent modifiers.
+-            </div>
+-        </div>
+-        """, unsafe_allow_html=True)
+-    with stage_col3:
+-        st.markdown("""
+-        <div class="metric-card metric-matched" style="text-align:left;">
+-            <div style="font-size:1.3rem; margin-bottom:0.5rem;">⚡ Stage 2</div>
+-            <div style="color:#6EE7B7; font-weight:600; margin-bottom:0.4rem;">Intent Multiplier Matrix</div>
+-            <div style="color:#94A3B8; font-size:0.82rem; line-height:1.5;">
+-                Synthesizes 7 signal dimensions — experience band, corporate DNA,
+-                education tier, geography, recruiter response rate, notice period,
+-                and skill depth — into a composite trajectory multiplier.
+-            </div>
++        <div style="color: #64748B; font-size: 0.85rem; max-width: 500px; margin: 0 auto; line-height:1.5;">
++            Mount candidate vector streams to fire target execution logic arrays and run deep scoring pipelines.
+         </div>
+-        """, unsafe_allow_html=True)
++    </div>
++    """, unsafe_allow_html=True)
+ 
+ 
+ # ═══════════════════════════════════════════════════════════════════════════════
+-# FOOTER
++# FOOTER CREDITS
+ # ═══════════════════════════════════════════════════════════════════════════════
+ 
+-st.markdown('<div class="zen-divider"></div>', unsafe_allow_html=True)
++st.markdown('<div class="premium-divider"></div>', unsafe_allow_html=True)
+ st.markdown("""
+-<div style="text-align:center; color:#475569; font-size:0.78rem; padding:1rem 0;">
+-    ZenithRank v1.0.0 · Built by IndianBisons (Aman Naurangabadi, Aniruddha Jadhav, Abdulkalam Qureshi, Akshay Patil)<br>
+-    <span style="color:#64748B;">Redrob AI — Best Candidate Discovery Challenge</span>
++<div style="text-align:center; color:#475569; font-size:0.75rem; font-weight:400; letter-spacing: 1px;">
++    ZENITHRANK v1.0.0 · POWERED BY <span style="color:#D4AF37; font-family:'Cinzel', serif; font-weight:700;">INDIAN BISONS</span><br>
++    <span style="color:#334155; font-size:0.7rem;">AMAN NAURANGABADI · ANIRUDDHA JADHAV · ABDULKALAM QURESHI · AKSHAY PATIL</span>
+ </div>
+-""", unsafe_allow_html=True)
+-
+-
+-
+-
++""", unsafe_allow_html=True)
+\ No newline at end of file
+diff --git a/sample_candidates.json b/pipeline/sample_candidates.json
+similarity index 79%
+rename from sample_candidates.json
+rename to pipeline/sample_candidates.json
+index 4eacaba..c1f4449 100644
+--- a/sample_candidates.json
++++ b/pipeline/sample_candidates.json
+@@ -159,7 +159,7 @@
+       "current_title": "AI Engineer",
+       "current_company": "Spotify",
+       "location": "Bangalore",
+-      "years_of_experience": 5.5
++      "years_of_experience": 15
+     },
+     "skills": [
+       {"name": "Recommendation Systems", "proficiency": "expert", "duration_months": 42},
+@@ -200,5 +200,54 @@
+     "redrob_signals": {"recruiter_response_rate": 0.40, "notice_period_days": 30, "willing_to_relocate": false},
+     "certifications": [],
+     "projects": []
++  },
++  {
++    "candidate_id": "CAND_DEMO_006",
++    "profile": {
++      "summary": "Information Retrieval Specialist with 6.5 YOE focused entirely on vector engines and distributed index orchestration. Designed enterprise search architectures matching hybrid embedding graphs.",
++      "headline": "IR Specialist | Vector Search Orchestration | Milvus",
++      "current_title": "Lead Search Architect",
++      "current_company": "Myntra",
++      "location": "Bangalore",
++      "years_of_experience": 0
++    },
++    "skills": [
++      {"name": "Information Retrieval", "proficiency": "expert", "duration_months": 50},
++      {"name": "Milvus", "proficiency": "expert", "duration_months": 36},
++      {"name": "Qdrant", "proficiency": "advanced", "duration_months": 24},
++      {"name": "Python", "proficiency": "expert", "duration_months": 78},
++      {"name": "Hybrid Search", "proficiency": "expert", "duration_months": 40}
++    ],
++    "career_history": [
++      {"title": "Lead Search Architect", "company": "Myntra", "duration_months": 36, "company_age_years": 19, "description": "Rebuilt e-commerce discovery backend via high-concurrency Milvus collection clustering. Reduced retrieval latency by 35% while expanding retrieval domain coverage."},
++      {"title": "Senior ML Engineer", "company": "InMobi", "duration_months": 42, "company_age_years": 19, "description": "Designed contextual matching models for ad-ranking. Applied Map and MRR validation matrices to stream-optimized dense vectors."}
++    ],
++    "education": [{"degree": "B.Tech", "field_of_study": "Computer Science", "institution": "IIT Madras", "tier": "tier_1"}],
++    "redrob_signals": {"recruiter_response_rate": 0.81, "notice_period_days": 30, "willing_to_relocate": true},
++    "certifications": [],
++    "projects": []
++  },
++  {
++    "candidate_id": "CAND_DEMO_TRAP_04",
++    "profile": {
++      "summary": "Distinguished Talent Acquisition Advisor specializing in full-cycle recruitment pipelines for tech conglomerates. Absolute subject matter expert in Elasticsearch, ranking systems, and vector matching architectures.",
++      "headline": "Lead Technical Recruiter",
++      "current_title": "Lead Recruiter",
++      "current_company": "StaffingCorp",
++      "location": "Delhi",
++      "years_of_experience": 9.0
++    },
++    "skills": [
++      {"name": "Elasticsearch", "proficiency": "expert", "duration_months": 0},
++      {"name": "Vector Search", "proficiency": "expert", "duration_months": 0},
++      {"name": "Ranking", "proficiency": "expert", "duration_months": 0}
++    ],
++    "career_history": [
++      {"title": "Lead Recruiter", "company": "StaffingCorp", "duration_months": 108, "company_age_years": 12, "description": "Orchestrated specialized high-volume executive searching pipelines for international engineering portfolios."}
++    ],
++    "education": [{"degree": "B.A.", "field_of_study": "Psychology", "institution": "Delhi University", "tier": "tier_3"}],
++    "redrob_signals": {"recruiter_response_rate": 0.90, "notice_period_days": 15, "willing_to_relocate": false},
++    "certifications": [],
++    "projects": []
+   }
+-]
++]
+\ No newline at end of file

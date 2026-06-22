@@ -3,14 +3,14 @@ team_name: "IndianBisons"
 primary_contact:
   name: "Aniruddha Adhikrao Jadhav"
   email: "aniruddha.jadhav7@icloud.com"
-  phone: "+91-9876543210"
+  phone: "+91 8080360796"
 
 team_members:
   - name: "Aniruddha Adhikrao Jadhav"
-    email: "[EMAIL_ADDRESS]"
+    email: "aniruddha.jadhav7@icloud.com"
     role: "System and Backend Architect"
   - name: "Aman Sham Naurangabadi"
-    email: "[EMAIL_ADDRESS]"
+    email: "amannaurangabadi9@gmail.com"
     role: "Data Quality and Systems Tester"
   - name: "Abdulkalam qureshi"
     email: "[EMAIL_ADDRESS]"

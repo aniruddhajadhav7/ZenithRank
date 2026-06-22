@@ -45,6 +45,13 @@ MAX_SANDBOX_CANDIDATES = 100
 # ═══════════════════════════════════════════════════════════════════════════════
 # PAGE CONFIG
 # ═══════════════════════════════════════════════════════════════════════════════
+st.set_page_config(
+    page_title="ZenithRank | Intelligence Engine",
+    page_icon="👑",
+    layout="wide",
+    initial_sidebar_state="expanded",
+)
+
 """
 ZenithRank — Recruiter Intelligence Engine
 =========================================
@@ -60,12 +67,6 @@ Operational Significance:
   - Mitigates profile spoofing and adversarial text loop manipulations in real time.
   - Accelerates enterprise candidate shortlisting with rigorous sorting operations.
 """
-st.set_page_config(
-    page_title="ZenithRank | Intelligence Engine",
-    page_icon="👑",
-    layout="wide",
-    initial_sidebar_state="expanded",
-)
 
 # ═══════════════════════════════════════════════════════════════════════════════
 # THEME CONFIGURATION — Premium Black, Silver & Gold (Glassmorphic Reconstruct)
@@ -445,7 +446,7 @@ st.markdown("""
 
 <div class="corner-logo-container">
     <div class="corner-logo-img-wrapper">
-        <img src="app/static/logo.png" onerror="this.src='logo.png';">
+        <img src="data:image/png;base64,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">
     </div>
     <div class="corner-logo-text">INDIAN BISONS</div>
 </div>
