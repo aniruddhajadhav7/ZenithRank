@@ -159,7 +159,7 @@
       "current_title": "AI Engineer",
       "current_company": "Spotify",
       "location": "Bangalore",
-      "years_of_experience": 5.5
+      "years_of_experience": 15
     },
     "skills": [
       {"name": "Recommendation Systems", "proficiency": "expert", "duration_months": 42},
@@ -198,6 +198,55 @@
     ],
     "education": [{"degree": "B.Com", "field_of_study": "Accounting", "institution": "Mumbai University", "tier": "tier_3"}],
     "redrob_signals": {"recruiter_response_rate": 0.40, "notice_period_days": 30, "willing_to_relocate": false},
+    "certifications": [],
+    "projects": []
+  },
+  {
+    "candidate_id": "CAND_DEMO_006",
+    "profile": {
+      "summary": "Information Retrieval Specialist with 6.5 YOE focused entirely on vector engines and distributed index orchestration. Designed enterprise search architectures matching hybrid embedding graphs.",
+      "headline": "IR Specialist | Vector Search Orchestration | Milvus",
+      "current_title": "Lead Search Architect",
+      "current_company": "Myntra",
+      "location": "Bangalore",
+      "years_of_experience": 0
+    },
+    "skills": [
+      {"name": "Information Retrieval", "proficiency": "expert", "duration_months": 50},
+      {"name": "Milvus", "proficiency": "expert", "duration_months": 36},
+      {"name": "Qdrant", "proficiency": "advanced", "duration_months": 24},
+      {"name": "Python", "proficiency": "expert", "duration_months": 78},
+      {"name": "Hybrid Search", "proficiency": "expert", "duration_months": 40}
+    ],
+    "career_history": [
+      {"title": "Lead Search Architect", "company": "Myntra", "duration_months": 36, "company_age_years": 19, "description": "Rebuilt e-commerce discovery backend via high-concurrency Milvus collection clustering. Reduced retrieval latency by 35% while expanding retrieval domain coverage."},
+      {"title": "Senior ML Engineer", "company": "InMobi", "duration_months": 42, "company_age_years": 19, "description": "Designed contextual matching models for ad-ranking. Applied Map and MRR validation matrices to stream-optimized dense vectors."}
+    ],
+    "education": [{"degree": "B.Tech", "field_of_study": "Computer Science", "institution": "IIT Madras", "tier": "tier_1"}],
+    "redrob_signals": {"recruiter_response_rate": 0.81, "notice_period_days": 30, "willing_to_relocate": true},
+    "certifications": [],
+    "projects": []
+  },
+  {
+    "candidate_id": "CAND_DEMO_TRAP_04",
+    "profile": {
+      "summary": "Distinguished Talent Acquisition Advisor specializing in full-cycle recruitment pipelines for tech conglomerates. Absolute subject matter expert in Elasticsearch, ranking systems, and vector matching architectures.",
+      "headline": "Lead Technical Recruiter",
+      "current_title": "Lead Recruiter",
+      "current_company": "StaffingCorp",
+      "location": "Delhi",
+      "years_of_experience": 9.0
+    },
+    "skills": [
+      {"name": "Elasticsearch", "proficiency": "expert", "duration_months": 0},
+      {"name": "Vector Search", "proficiency": "expert", "duration_months": 0},
+      {"name": "Ranking", "proficiency": "expert", "duration_months": 0}
+    ],
+    "career_history": [
+      {"title": "Lead Recruiter", "company": "StaffingCorp", "duration_months": 108, "company_age_years": 12, "description": "Orchestrated specialized high-volume executive searching pipelines for international engineering portfolios."}
+    ],
+    "education": [{"degree": "B.A.", "field_of_study": "Psychology", "institution": "Delhi University", "tier": "tier_3"}],
+    "redrob_signals": {"recruiter_response_rate": 0.90, "notice_period_days": 15, "willing_to_relocate": false},
     "certifications": [],
     "projects": []
   }
