@@ -632,7 +632,7 @@ if uploaded_file is not None:
             if base_cosine_score > 0:
                 # Stage 2: Intent Multipliers Matrix
                 multiplier = compute_profile_multipliers(candidate)
-                final_score = round(base_cosine_score * multiplier, 6)
+                final_score = round(base_cosine_score * multiplier, 4)
 
                 shortlist_buffer.append({
                     "candidate_id": cid,
@@ -693,7 +693,7 @@ if uploaded_file is not None:
                 column_config={
                     "candidate_id": st.column_config.TextColumn("CANDIDATE HASH", width="medium"),
                     "rank": st.column_config.NumberColumn("RANK", format="%d", width="small"),
-                    "score": st.column_config.NumberColumn("COMPOSITE SCORE", format="%.6f", width="medium"),
+                    "score": st.column_config.NumberColumn("COMPOSITE SCORE", format="%.4f", width="medium"),
                     "reasoning": st.column_config.TextColumn("FACT-ANCHORED EVIDENCE REPORT", width="large"),
                 },
                 use_container_width=True,

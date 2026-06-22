@@ -295,6 +295,10 @@ def rank_candidates(
     # Clamp negative scores to zero
     composite_scores = np.maximum(composite_scores, 0.0)
 
+    # Round to 4 decimal places before sorting so tie-breaking operates
+    # on the exact same precision that gets written to the output CSV.
+    composite_scores = np.round(composite_scores, 4)
+
     elapsed_scoring = time.perf_counter() - t0
     log.info("Scoring complete in %.2f seconds.", elapsed_scoring)
 
@@ -342,7 +346,7 @@ def write_submission_csv(
             reasoning = build_candidate_justification(candidate, rank_idx, score)
             # Sanitise reasoning: remove newlines, ensure no unquoted commas break CSV
             reasoning = reasoning.replace("\n", " ").replace("\r", " ").strip()
-            writer.writerow([cid, rank_idx, f"{score:.6f}", reasoning])
+            writer.writerow([cid, rank_idx, f"{score:.4f}", reasoning])
 
     # ── Post-write validation ────────────────────────────────────────
     _validate_output(output_path)
