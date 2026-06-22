@@ -149,8 +149,10 @@ def _intent_modifier(response_rate: float, notice_days: int) -> float:
 
 def _hard_reject_modifier(candidate: Dict[str, Any]) -> float:
     """
-    Returns 0.0 (instant elimination) for candidates matching any of the
-    five hard-rejection rules from Section 1:
+    Returns a severe soft-penalty multiplier for candidates matching
+    profile-quality rejection rules. Uses 0.01 (severe downranking)
+    instead of 0.0 (hard deletion) to preserve candidates in the pool
+    for fallback coverage, ensuring we always have ≥100 rows to output.
 
     R2: Pure academic researchers with zero production deployment history.
     R3: LangChain tutorial wrappers (< 12 months AI, no pre-LLM ML).
@@ -159,6 +161,8 @@ def _hard_reject_modifier(candidate: Dict[str, Any]) -> float:
     (R1 — pure services — is handled by _corporate_dna_modifier with a
      severe penalty rather than a hard zero, to avoid double-filtering.)
     """
+    SOFT_REJECT = 0.01  # severe penalty, but candidate stays in pool
+
     profile = candidate.get("profile", {})
     career_history = candidate.get("career_history", [])
     skills = candidate.get("skills", [])
@@ -180,7 +184,6 @@ def _hard_reject_modifier(candidate: Dict[str, Any]) -> float:
                     "scale", "latency", "sre", "devops"]
     )
     if is_academic and not has_production:
-        # Also check career history for any non-academic employer
         non_academic_employers = [
             job for job in career_history
             if not any(kw in clean_text_lower(job.get("company", ""))
@@ -188,7 +191,7 @@ def _hard_reject_modifier(candidate: Dict[str, Any]) -> float:
                                   "college", "academia"])
         ]
         if len(non_academic_employers) == 0:
-            return 0.0
+            return SOFT_REJECT
 
     # ── R3: LangChain wrapper with no ML depth ───────────────────────
     ai_months = 0
@@ -212,7 +215,7 @@ def _hard_reject_modifier(candidate: Dict[str, Any]) -> float:
 
     if ai_months < 12 and not has_pre_llm_ml:
         if "langchain" in combined_text or "llm wrapper" in combined_text:
-            return 0.0
+            return SOFT_REJECT
 
     # ── R4: Senior/Architect without recent code ─────────────────────
     is_senior_or_architect = any(
@@ -221,7 +224,6 @@ def _hard_reject_modifier(candidate: Dict[str, Any]) -> float:
                     "vp", "head of"]
     )
     if is_senior_or_architect:
-        # Check if last coding role is within 18 months
         signals = candidate.get("redrob_signals", {})
         months_since_last_code = None
         try:
@@ -229,7 +231,7 @@ def _hard_reject_modifier(candidate: Dict[str, Any]) -> float:
         except (ValueError, TypeError):
             pass
         if months_since_last_code is not None and months_since_last_code > 18:
-            return 0.0
+            return SOFT_REJECT
 
     # ── R5: Pure CV / Speech / Robotics specialist ───────────────────
     non_text_score = sum(
@@ -238,7 +240,6 @@ def _hard_reject_modifier(candidate: Dict[str, Any]) -> float:
     text_retrieval_score = sum(
         1 for token in _IR_ML_TOKENS if token in combined_text
     )
-    # Also count from skill names
     for skill in skills:
         skill_name = clean_text_lower(skill.get("name", ""))
         if any(t in skill_name for t in ["computer vision", "image", "speech",
@@ -250,9 +251,9 @@ def _hard_reject_modifier(candidate: Dict[str, Any]) -> float:
             text_retrieval_score += 1
 
     if non_text_score >= 3 and text_retrieval_score == 0:
-        return 0.0
+        return SOFT_REJECT
 
-    return 1.0  # pass all hard-rejection gates
+    return 1.0  # pass all soft-rejection gates
 
 
 # ---------------------------------------------------------------------------

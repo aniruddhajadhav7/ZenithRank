@@ -595,6 +595,7 @@ if uploaded_file is not None:
         jd_vector_space = vectorizer.fit_transform([" ".join(CORE_ARCHITECTURE_TOKENS)])
 
         shortlist_buffer = []
+        fallback_buffer = []
         honeypots_defused = 0
 
         progress_bar = st.progress(0, text="Staging processing nodes...")
@@ -604,9 +605,9 @@ if uploaded_file is not None:
             progress_bar.progress((idx + 1) / total_records, text=f"Evaluating Vector Arrays {idx + 1}/{total_records} · File Pointer: `{cid}`")
 
             # Stage 0: Verification
-            if is_candidate_synthetic_trap(candidate):
+            is_trap = is_candidate_synthetic_trap(candidate)
+            if is_trap:
                 honeypots_defused += 1
-                continue
 
             # Context Text Block Assembly
             profile = candidate.get("profile", {})
@@ -632,52 +633,66 @@ if uploaded_file is not None:
             if base_cosine_score > 0:
                 # Stage 2: Intent Multipliers Matrix
                 multiplier = compute_profile_multipliers(candidate)
-                final_score = round(base_cosine_score * multiplier, 4)
-
-                shortlist_buffer.append({
-                    "candidate_id": cid,
-                    "score": final_score,
-                    "_candidate_record": candidate,
-                })
+                
+                if is_trap:
+                    final_score = round(base_cosine_score * multiplier * 0.0001, 4)
+                    fallback_buffer.append({
+                        "candidate_id": cid,
+                        "score": final_score,
+                        "_candidate_record": candidate,
+                    })
+                else:
+                    final_score = round(base_cosine_score * multiplier, 4)
+                    shortlist_buffer.append({
+                        "candidate_id": cid,
+                        "score": final_score,
+                        "_candidate_record": candidate,
+                    })
 
         elapsed = time.perf_counter() - t_start
         progress_bar.empty()
 
+        # Data Frame Formulation
+        shortlist_buffer.sort(key=lambda x: (-x["score"], x["candidate_id"]))
+        final_results = shortlist_buffer[:100]
+        
+        # Fallback array capture
+        if len(final_results) < 100 and fallback_buffer:
+            fallback_buffer.sort(key=lambda x: (-x["score"], x["candidate_id"]))
+            final_results.extend(fallback_buffer[:100 - len(final_results)])
+
         # ── STATISTICAL LUXURY GRID ───────────────────────────────────
-        matches_found = len(shortlist_buffer)
+        matches_found = len(final_results)
         
         m_col1, m_col2, m_col3 = st.columns(3)
         with m_col1:
             st.markdown(f"""
             <div class="stat-card stat-silver">
                 <div class="stat-label">INGESTED FEEDS</div>
-                <div class="stat-value">{total_records}</div>
+                <div class="stat-value">{{total_records}}</div>
             </div>
             """, unsafe_allow_html=True)
         with m_col2:
             st.markdown(f"""
             <div class="stat-card stat-dark">
                 <div class="stat-label">DEFUSED TRAPS</div>
-                <div class="stat-value">{honeypots_defused}</div>
+                <div class="stat-value">{{honeypots_defused}}</div>
             </div>
             """, unsafe_allow_html=True)
         with m_col3:
             st.markdown(f"""
             <div class="stat-card stat-gold">
                 <div class="stat-label">MATCHES ARCHITECTED</div>
-                <div class="stat-value">{matches_found}</div>
+                <div class="stat-value">{{matches_found}}</div>
             </div>
             """, unsafe_allow_html=True)
 
         # Processing Context Output
-        st.markdown(f"<div style='text-align:right; color:#64748B; font-size:0.8rem; margin-top:0.5rem;'>Pipeline computed completely in {elapsed:.4f} seconds</div>", unsafe_allow_html=True)
+        st.markdown(f"<div style='text-align:right; color:#64748B; font-size:0.8rem; margin-top:0.5rem;'>Pipeline computed completely in {{elapsed:.4f}} seconds</div>", unsafe_allow_html=True)
 
-        # Data Frame Formulation
-        if shortlist_buffer:
-            results_df = pd.DataFrame(shortlist_buffer)
-            results_df = results_df.sort_values(by=["score", "candidate_id"], ascending=[False, True]).reset_index(drop=True)
-
-            shortlist_output = results_df.head(100).copy()
+        if final_results:
+            results_df = pd.DataFrame(final_results)
+            shortlist_output = results_df.copy()
             shortlist_output["rank"] = range(1, len(shortlist_output) + 1)
             shortlist_output["reasoning"] = shortlist_output.apply(
                 lambda row: build_candidate_justification(row["_candidate_record"], row["rank"], row["score"]), axis=1
