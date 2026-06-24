@@ -30,7 +30,8 @@ runtime_summary:
   hardware_target: "Isolated 16GB CPU Docker Sandbox Container"
 
 ai_tools_declared:
-  - "Claude"
+  - "VS Code"
+  - "GitHub Copilot"
 
 methodology_summary: |
   A robust offline multi-stage matching engine combining a sparse TF-IDF token vector
