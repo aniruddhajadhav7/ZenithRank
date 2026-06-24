@@ -39,7 +39,7 @@ CORE_ARCHITECTURE_TOKENS = [
     "elasticsearch", "opensearch", "ndcg", "mrr", "map", "hybrid search",
 ]
 
-MAX_SANDBOX_CANDIDATES = 100
+MAX_SANDBOX_CANDIDATES = 500
 
 
 # ═══════════════════════════════════════════════════════════════════════════════
@@ -485,7 +485,7 @@ with st.sidebar:
     <div class="sidebar-panel" style="font-size: 0.8rem; color:#64748B;">
         <div class="sidebar-row"><span>Vocabulary:</span><span>23 Domain Tokens</span></div>
         <div class="sidebar-row"><span>N-gram Range:</span><span>(1, 2)</span></div>
-        <div class="sidebar-row"><span>Batch Size Limit:</span><span>100 Profiles</span></div>
+        <div class="sidebar-row"><span>Batch Size Limit:</span><span>500 Profiles</span></div>
         <div class="sidebar-row"><span>Tie-Breaker:</span><span>candidate_id (Asc)</span></div>
     </div>
     """, unsafe_allow_html=True)
@@ -582,6 +582,8 @@ if uploaded_file is not None:
         st.warning(f"⚠️ Limit constraint exceeded: trimming incoming feed from {total_records} down to top {MAX_SANDBOX_CANDIDATES} profiles.")
         candidate_batch = candidate_batch[:MAX_SANDBOX_CANDIDATES]
         total_records = MAX_SANDBOX_CANDIDATES
+    elif total_records > 100:
+        st.info(f"📊 Processing all {total_records} candidates — top 100 will be selected after scoring.")
 
     # Trigger Evaluation Button
     if st.button("EXECUTE PARALLEL MATCHING ENGINE", type="primary", use_container_width=True):
@@ -596,6 +598,7 @@ if uploaded_file is not None:
 
         shortlist_buffer = []
         fallback_buffer = []
+        zero_score_buffer = []
         honeypots_defused = 0
 
         progress_bar = st.progress(0, text="Staging processing nodes...")
@@ -624,42 +627,59 @@ if uploaded_file is not None:
             cleaned_corpus = clean_text_lower(corpus_block)
 
             if not cleaned_corpus.strip():
+                # Even empty-corpus candidates go to zero-score fallback
+                zero_score_buffer.append({
+                    "candidate_id": cid,
+                    "score": 0.0,
+                    "_candidate_record": candidate,
+                })
                 continue
 
             # Stage 1: Similarity Core Mapping
             cand_matrix = vectorizer.transform([cleaned_corpus])
             base_cosine_score = float((cand_matrix * jd_vector_space.T).toarray()[0][0])
 
-            if base_cosine_score > 0:
-                # Stage 2: Intent Multipliers Matrix
-                multiplier = compute_profile_multipliers(candidate)
-                
-                if is_trap:
-                    final_score = round(base_cosine_score * multiplier * 0.0001, 4)
-                    fallback_buffer.append({
-                        "candidate_id": cid,
-                        "score": final_score,
-                        "_candidate_record": candidate,
-                    })
-                else:
-                    final_score = round(base_cosine_score * multiplier, 4)
-                    shortlist_buffer.append({
-                        "candidate_id": cid,
-                        "score": final_score,
-                        "_candidate_record": candidate,
-                    })
+            # Stage 2: Intent Multipliers Matrix
+            multiplier = compute_profile_multipliers(candidate)
+            
+            if is_trap:
+                final_score = round(base_cosine_score * multiplier * 0.0001, 4)
+                fallback_buffer.append({
+                    "candidate_id": cid,
+                    "score": final_score,
+                    "_candidate_record": candidate,
+                })
+            elif base_cosine_score > 0:
+                final_score = round(base_cosine_score * multiplier, 4)
+                shortlist_buffer.append({
+                    "candidate_id": cid,
+                    "score": final_score,
+                    "_candidate_record": candidate,
+                })
+            else:
+                # Zero TF-IDF score but not a trap — keep in fallback
+                zero_score_buffer.append({
+                    "candidate_id": cid,
+                    "score": 0.0,
+                    "_candidate_record": candidate,
+                })
 
         elapsed = time.perf_counter() - t_start
         progress_bar.empty()
 
-        # Data Frame Formulation
+        # Data Frame Formulation — always guarantee up to 100 results
         shortlist_buffer.sort(key=lambda x: (-x["score"], x["candidate_id"]))
         final_results = shortlist_buffer[:100]
         
-        # Fallback array capture
+        # Fallback tier 1: trapped candidates with heavy penalty
         if len(final_results) < 100 and fallback_buffer:
             fallback_buffer.sort(key=lambda x: (-x["score"], x["candidate_id"]))
             final_results.extend(fallback_buffer[:100 - len(final_results)])
+
+        # Fallback tier 2: zero-score candidates as last resort
+        if len(final_results) < 100 and zero_score_buffer:
+            zero_score_buffer.sort(key=lambda x: x["candidate_id"])
+            final_results.extend(zero_score_buffer[:100 - len(final_results)])
 
         # ── STATISTICAL LUXURY GRID ───────────────────────────────────
         matches_found = len(final_results)
