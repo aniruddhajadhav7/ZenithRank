@@ -17,7 +17,7 @@ team_members:
     role: "System Infrastructure Engineer"
   - name: "Akshay Patil"
     email: "[EMAIL_ADDRESS]"
-    role: "Frotend Engineer"
+    role: "Frontend Engineer"
 
 github_repo: "https://github.com/aniruddhajadhav7/ZenithRank"
 sandbox_link: "https://zenithrank-demo.streamlit.app"
