@@ -47,7 +47,7 @@ MAX_SANDBOX_CANDIDATES = 500
 # ═══════════════════════════════════════════════════════════════════════════════
 st.set_page_config(
     page_title="ZenithRank | Intelligence Engine",
-    page_icon="👑",
+    page_icon="logo.png",
     layout="wide",
     initial_sidebar_state="expanded",
 )
