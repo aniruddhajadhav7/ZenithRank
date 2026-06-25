@@ -78,7 +78,7 @@ Ties are programmatically broken using ascending alphabetical candidate IDs.
 ## 🌐 Recruiter Sandbox (Demo)
 We built a visually stunning Streamlit dashboard for judges and recruiters to manually verify pipeline logic against test batches.
 
-**Live Sandbox Link:** [https://zenithrank-demo.streamlit.app](https://zenithrank-5niatziyvcd58qcqrznncz.streamlit.app/) 
+**Live Sandbox Link:** [https://zenithrank-demo.streamlit.app](https://zenithrank-7nnaydnyzqvvterdhctray.streamlit.app/) 
 
 To run the sandbox locally:
 ```bash
