@@ -1,4 +1,4 @@
-# 🎯 ZenithRank
+#  ZenithRank
 
 **Team IndianBisons** | Redrob AI Candidate Discovery Challenge v4
 
@@ -18,22 +18,22 @@ The challenge was to build an automated sourcing system to rank 100,000 candidat
 
 ---
 
-## 🚀 How We Solved It
+##  How We Solved It
 We engineered **ZenithRank**, an offline matching pipeline that ignores heavy LLM reliance in favor of an optimized, deterministic, multi-stage architecture:
 
-### 🛡️ Stage 0: Anti-Honeypot Shield (`pipeline/anti_trap.py`)
+###  Stage 0: Anti-Honeypot Shield (`pipeline/anti_trap.py`)
 Before scoring begins, we aggressively filter synthetic data. The system mathematically flags and drops profiles if:
 - Candidate tenure at a company exceeds the actual age of the company.
 - A skill is listed as "expert" but possesses exactly 0 months of duration.
 - The profile contains standard generative AI boilerplate hallucination loops.
 
-### 🔍 Stage 1: Sparse Vector Engine
+###  Stage 1: Sparse Vector Engine
 We leverage a specialized `scikit-learn` TF-IDF Vectorizer initialized exclusively with 23 high-value domain tokens tailored to the Job Description (e.g., `retrieval`, `ranking`, `elasticsearch`, `ndcg`). We compute the baseline cosine similarity against candidate text corpora. 
 
-### ⚡ Stage 2: Intent Multiplier Matrix (`pipeline/feature_engine.py`)
+###  Stage 2: Intent Multiplier Matrix (`pipeline/feature_engine.py`)
 Instead of pure keyword matching, we engineered a deterministic trajectory multiplier. We extract 7 behavioral signals—years of experience (YOE), corporate DNA, education tier, geography, response rates, and notice periods. Top-tier candidates are geometrically boosted to maximize the top-heavy **NDCG@10** judging metric.
 
-### 🧠 Stage 3: Dynamic Fact-Anchored Reasoning (`pipeline/reasoning_agent.py`)
+###  Stage 3: Dynamic Fact-Anchored Reasoning (`pipeline/reasoning_agent.py`)
 To survive Stage 4 manual reviews without LLMs, our reasoning engine dynamically strings together verified, factual extractions from the raw JSON (exact YOE, actual current title, real matched skills, and engagement metrics). **It completely avoids rigid templating** by building organic, varied sentence structures based on the candidate's specific trajectory, guaranteeing high-quality, hallucination-free justifications.
 
 > [!IMPORTANT]
@@ -42,7 +42,7 @@ To survive Stage 4 manual reviews without LLMs, our reasoning engine dynamically
 
 ---
 
-## ⏱️ Performance Metrics
+##  Performance Metrics
 ZenithRank destroys the hackathon's compute limits. 
 - **Execution Time:** ~17 to 22 seconds (for 100,000 candidates).
 - **Peak Memory:** ~800 MB RAM.
@@ -51,7 +51,7 @@ ZenithRank destroys the hackathon's compute limits.
 
 ---
 
-## 🛠️ Reproduction & Setup
+##  Reproduction & Setup
 
 ### 1. Requirements
 Ensure you are using Python 3.10+ and install the dependencies:
@@ -75,7 +75,7 @@ Ties are programmatically broken using ascending alphabetical candidate IDs.
 
 ---
 
-## 🌐 Recruiter Sandbox (Demo)
+##  Recruiter Sandbox (Demo)
 We built a visually stunning Streamlit dashboard for judges and recruiters to manually verify pipeline logic against test batches.
 
 **Live Sandbox Link:** [https://zenithrank-demo.streamlit.app](https://zenithrank-7nnaydnyzqvvterdhctray.streamlit.app/) 
@@ -87,7 +87,7 @@ streamlit run app.py
 
 ---
 
-## 👥 Team Information: IndianBisons
+##  Team Information: IndianBisons
 Built by Software & Infrastructure engineers and applied AI practitioners.
 - **Aman Naurangabadi**
 - **Aniruddha Jadhav**
