@@ -90,7 +90,7 @@ streamlit run app.py
 ##  Team Information: IndianBisons
 Built by Software & Infrastructure engineers and applied AI practitioners.
 - **Aman Naurangabadi**
-- **Aniruddha Jadhav**
+- **Aniruddha Jadhav** [Team Leader][Email: aniruddha.jadhav7@icloud.com]
 - **Abdulkalam Qureshi**
 - **Akshay Patil**
 
