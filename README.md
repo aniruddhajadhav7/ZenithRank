@@ -92,6 +92,6 @@ Built by Software & Infrastructure engineers and applied AI practitioners.
 - **Aman Naurangabadi**
 - **Aniruddha Jadhav** [Team Leader][Email: aniruddha.jadhav7@icloud.com]
 - **Abdulkalam Qureshi**
-- **Akshay Patil**
+- **Yuvraj Ithape**
 
 *No manual edits, hidden model weights, or external databases were utilized in this pipeline. Pure offline deterministic engineering.*
