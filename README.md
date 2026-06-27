@@ -87,11 +87,25 @@ streamlit run app.py
 
 ---
 
-##  Team Information: IndianBisons
-Built by Software & Infrastructure engineers and applied AI practitioners.
-- **Aman Naurangabadi**
-- **Aniruddha Jadhav** [Team Leader][Email: aniruddha.jadhav7@icloud.com]
-- **Abdulkalam Qureshi**
-- **Yuvraj Ithape**
+## team_name: "IndianBisons"
+
+##  primary_contact:
+  name: "Aniruddha Adhikrao Jadhav"
+  email: "aniruddha.jadhav7@icloud.com"
+  phone: "+91 8080360796"
+
+##  team_members:
+  - name: "Aniruddha Adhikrao Jadhav"
+    email: "aniruddha.jadhav7@icloud.com"
+    role: "System Architect"
+  - name: "Aman Sham Naurangabadi"
+    email: "amannaurangabadi9@gmail.com"
+    role: "Data Quality and Systems Tester"
+  - name: "Abdulkalam qureshi"
+    email: "fardeenquraishi2002@gmail.com"
+    role: "System Infrastructure Engineer"
+  - name: "Yuvraj Ithape"
+    email: "yuvrajithape9696@gmail.com"
+    role: "Frontend Engineer"
 
 *No manual edits, hidden model weights, or external databases were utilized in this pipeline. Pure offline deterministic engineering.*
